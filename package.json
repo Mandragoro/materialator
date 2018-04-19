@@ -1,0 +1,11 @@
+{
+  "name": "materialator",
+  "version": "1.0.0",
+  "description": "Flash cards maker",
+  "main": "materialator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abraham Trujillo",
+  "license": "ISC"
+}

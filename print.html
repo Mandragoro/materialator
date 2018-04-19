@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+  </head>
+
+  <style>
+    :root {
+      /* --item-size: 285px; */
+      --item-size: 9cm;
+      --font-size: 2em;
+      --image-wrapper-size: 80%;
+      --border-width: 2px;
+      --border-color: #FF1493;
+      --row-gap: 1cm;
+    }
+    @font-face {
+      font-family: myFont;
+      src: url(HelloEtchASketch.ttf);
+    }
+    * {
+        box-sizing: border-box;
+        /* font-family: 'Open Sans', sans-serif; */
+        /* font-family: 'Open Sans Condensed', sans-serif; */
+        /* font-family: 'Nanum Pen Script', cursive; */
+        /* font-family: 'Indie Flower', cursive; */
+        /* font-family: Century Gothic, 'Indie Flower'; */
+        font-family: myFont, 'Indie Flower';
+      }
+    html{
+      background-color: lightslategrey;
+    }
+    body{
+      /* margin: 20px; */
+      background-color: lightslategrey;
+    }
+    .columns{
+      margin: 0px;
+    }
+    .page{
+      background: white;
+      width: 21cm;
+      height: 29.7cm;
+      margin: 0 auto;
+      padding: 1cm;
+      margin-bottom: 0.5cm;
+      box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+      /* box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+      overflow: hidden;
+    }
+    .card{
+      box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    }
+    .grid-wrapper{
+      display: grid;
+      grid-auto-rows: var(--item-size);
+      grid-template-columns: repeat(auto-fill, var(--item-size));
+      grid-auto-flow: row;
+      /* grid-gap: 3em 3em; */
+      /* grid-row-gap: 1em; */
+      grid-row-gap: var(--row-gap);
+      /* grid-column-gap: 1em; */
+      justify-content: space-evenly;
+      max-width: 20cm;
+      max-height: 28.7cm;
+      /* margin: auto; */
+    }
+    .item{
+      border-style: solid;
+      border-color: var(--border-color);
+      border-width: var(--border-width);
+      border-radius: 3px;
+      padding: 0px;
+      overflow: hidden;
+      position: relative;
+    }
+    .item img{
+      margin: auto;
+      text-align: center;
+    }
+    .text-box{
+      border-top-style: solid;
+      border-top-color: var(--border-color);
+      border-top-width: var(--border-width);
+      width: 100%;
+      height: calc(100% - var(--image-wrapper-size));
+      text-align: center;
+      padding: 5px;
+      font-size: var(--font-size);
+
+      display:flex;
+      align-items: center; /* Vertical center alignment */
+      justify-content: center; /* Horizontal center alignment */
+    }
+    .imageWrapper{
+      display: block;
+      width: 100%;
+      height: var(--image-wrapper-size);
+    }
+    .imageWrapper img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .boxContainer{
+      position: absolute;
+      display: flex;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 80%;
+      height: 80%;
+      background-color: white;
+    }
+    .boxContainer span{
+      position: absolute;
+      bottom: 3%;
+      right: 10%;
+      font-size: 20px;
+    }
+    #tools{
+      position: fixed;
+      left: 80%;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    @media print {
+    	body {
+    		background: #fff !important;
+        margin: 0px;
+    	}
+    	.page {
+    		background: #fff;
+        margin: 0px;
+        box-shadow: none;
+    		-webkit-print-color-adjust: exact;
+      	color-adjust: exact;
+    	}
+      .columns{
+        margin-top: -12px;
+      }
+      #tools, #header{
+        display: none;
+      }
+      .columns:not(:last-child){
+        margin-bottom: inherit;
+      }
+      .dont-print-me{
+        display: none;
+      }
+    }
+    @media only screen and (max-width: 600px) {
+      body {
+          /*background-color: lightblue;*/
+      }
+      .text, .subtitle{
+        width: 100%;
+      }
+    }
+
+  </style>
+
+  <body ng-app="app" ng-controller="myController">
+
+    <section>
+      <nav class="navbar is-primary dont-print-me" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <span class="navbar-item">
+            <p class="title">
+              Materialator >
+            </p>
+          </span>
+
+          <div class="navbar-burger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </nav>
+    </section>
+
+    <!-- <section class="hero is-primary dont-print-me">
+      <div class="hero-body">
+        <p class="title">
+          Materialator
+        </p>
+        <p class="subtitle">
+          Everything you need to <strong>create material</strong>
+        </p>
+      </div>
+    </section> -->
+
+    <section>
+      <div class="columns" id="columns">
+
+        <div class="column is-9">
+
+          <!-- Page -->
+          <div class="page" id="page" ng-repeat="(index,val) in pageArr track by $index">
+
+            <!-- Grid -->
+            <div class="grid-wrapper">
+
+              <!-- Template 1 image & text -->
+              <!-- <div class="item" ng-repeat="i in itemsArr[index] track by $index">
+                <div class="imageWrapper">
+                  <img src="https://source.unsplash.com/random" alt="">
+                </div>
+                <div class="text-box">
+                  <span>{{i}}</span>
+                </div>
+              </div> -->
+              <!-- End Template 1 -->
+
+              <!-- Template 2 image/image/text -->
+              <div class="item" ng-repeat="i in itemsArr[index] track by $index">
+                <div class="imageWrapper" style="height:100%;">
+                  <img src="https://source.unsplash.com/random" alt="">
+                  <div class="boxContainer">
+                    <img src="https://source.unsplash.com/weekly?water" alt="">
+                    <span>{{i}}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- End Template 2 -->
+
+            </div>
+            <!-- End Grid -->
+
+          </div>
+          <!-- End Page -->
+
+        </div>
+
+
+        <div class="column is-2" id="tools">
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                Tools
+              </p>
+            </header>
+            <div class="card-content">
+              <form>
+            <div class="field">
+              <label class="label"># Items</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="itemQuantity" ng-change="ok()">
+              </div>
+              <p class="help">How many items per page</p>
+            </div>
+
+            <div class="field">
+              <label class="label">Item size (cm)</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="itemSize" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Row gap (cm)</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="rowGap" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Image size (%)</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="divitionSize" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Font size</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="fontSize" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Border width</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="" ng-model="borderWidth" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Border color</label>
+              <div class="control">
+                <input type="color" id="base" value="#ff1493" ng-model="borderColor" ng-change="ok()">
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control buttons has-addons is-right">
+                <button type="submit" class="button is-success" ng-click="ok()">
+                  <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  <span>Ok</span>
+                </button>
+              </div>
+            </div>
+          </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+
+
+
+
+
+  </body>
+
+  <script type="text/javascript">
+
+    var app = angular.module('app', [])
+    .controller('myController', function($scope){
+
+      var itemsArr = [ ['Item: 1','Item: 2','Item: 3','Item: 4'] ];
+      var pageArr = ['Item: 1'];
+      $scope.itemQuantity = 4;
+      $scope.itemSize = 9;
+      $scope.fontSize = 2;
+      $scope.divitionSize = 80;
+      $scope.itemsArr = itemsArr;
+      $scope.pageArr = pageArr;
+      $scope.borderWidth = 2;
+      $scope.borderColor = '#FF1493';
+      $scope.rowGap = 1;
+
+
+      $scope.ok = function ok(){
+        var itemsArr = [ [] ];
+        var pageArr = [];
+        var itemQuantity = $scope.itemQuantity;
+        var itemSize = $scope.itemSize;
+        var fontSize = $scope.fontSize;
+        var divitionSize = $scope.divitionSize;
+        var borderWidth = $scope.borderWidth;
+        var borderColor = $scope.borderColor;
+        var rowGap = $scope.rowGap;
+        //parseInt(document.documentElement.style.getPropertyValue('--row-gap'))
+
+        var rows = itemSize<28?Math.floor( 28.7/(itemSize+rowGap) ):1;
+        var cols = itemSize<=19 ?Math.floor(19/itemSize):1;
+        var pages = Math.ceil(itemQuantity/(rows*cols));
+        //h 28.7 cm
+        console.log("%c rows: " + rows,'background: #111; color: #bada55')
+        console.log("%c cols: " + cols,'background: #111; color: #bada55')
+        console.log("%c pages: " + pages,'background: #111; color: #bada55')
+
+        var maxItemsPerPage =  rows*cols;
+        var itemsLeft = itemQuantity;
+        var counter = 1;
+
+        for(var i=0; i < pages; i++){
+          pageArr.push("page: "+ (i+1));
+          itemsArr.push([]);
+
+          for(var j=0; j < itemQuantity; j++){
+            if(j===maxItemsPerPage || itemsLeft===0)break;
+            itemsArr[i].push("item: "+ (counter));
+            itemsLeft--;
+            counter++;
+          }
+
+        }
+
+
+        // var element = angular.element(document.querySelector('#wrapper'));
+        // document.documentElement.style.setProperty('--font-size', 8 + 'px');
+        // document.documentElement.style.setProperty('--item-size', itemSize + 'px');
+        document.documentElement.style.setProperty('--item-size', itemSize + 'cm');
+        document.documentElement.style.setProperty('--font-size', fontSize + 'em');
+        document.documentElement.style.setProperty('--image-wrapper-size', divitionSize + '%');
+        document.documentElement.style.setProperty('--border-width', borderWidth + 'px');
+        document.documentElement.style.setProperty('--border-color', borderColor);
+        document.documentElement.style.setProperty('--row-gap', rowGap + 'cm');
+
+        $scope.pageArr = pageArr;
+        $scope.itemsArr = itemsArr;
+      }
+
+
+      /*
+
+      page     21 cm
+      wrapper  18.9 cm
+
+      2 items * 9 itemSize = 18 cm
+      3 items * 9 itemSize = 27 cm
+
+      how many items per row?
+      items*itemSize /18.9
+      */
+
+    });
+
+
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script" rel="stylesheet">
+
+</html>

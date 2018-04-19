@@ -1,0 +1,181 @@
+<div class="item-toolbox template2ToolBox">
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">
+                <span ng-if="isLocked" class="icon has-text-danger">
+                    <i class="fas fa-lock"></i>
+                </span>
+                Item {{itemId}} tools
+            </p>
+            <button class="delete" ng-click="close()"></button>
+        </header>
+
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': t1showForm1}" ng-init="t1showForm1=true"
+                ng-click="t1showForm1=!t1showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Item</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!t1showForm1">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="t1showForm1">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="toolbox-form-wrapper-content" ng-show="t1showForm1">
+
+                <div class="field">
+                    <label class="label">Image style</label>
+                    <div class="control">
+                        <div class="select is-smallNOT">
+                            <!-- <select ng-model="itemData.elementObjectFitSelect" ng-change="okk('elementObjectFitSelect',itemData.elementObjectFitSelect)"> -->
+                            <select ng-model="itemData.elementObjectFitSelect" ng-change="elementObjectFitSelect(itemData.elementObjectFitSelect)">
+                                <option value="contain">Contain</option>
+                                <option value="cover">Cover</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Image size (%) </label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.elementDivitionSize" ng-change="okk('elementDivitionSize',itemData.elementDivitionSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementDivitionSize" ng-change="elementDivitionSize(itemData.elementDivitionSize)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Font size (px)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.elementFontSize" ng-change="okk('elementFontSize',itemData.elementFontSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementFontSize" ng-change="elementFontSize(itemData.elementFontSize)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Border width (px)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.elementBorderWidth" ng-change="okk('elementBorderWidth',itemData.elementBorderWidth)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementBorderWidth" ng-change="elementBorderWidth(itemData.elementBorderWidth)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Border color</label>
+                    <div class="control">
+                        <!-- <input type="color" id="base" value="#ff1493" ng-model="itemData.elementBorderColor" ng-change="okk('elementBorderColor',itemData.elementBorderColor)"> -->
+                        <input type="color" id="base" value="#ff1493" ng-model="itemData.elementBorderColor" ng-change="elementBorderColor(itemData.elementBorderColor)">
+                    </div>
+                </div>
+
+                <div class="field" style="margin-top:40px;">
+                    <div class="file is-info is-centered ">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" id="itemImageInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Choose image
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- <div class="card-content" style="box-shadow: inset 0px 20px 20px -20px #000000;">
+            <form>
+                <div class="field">
+                    <label class="label">Image style</label>
+                    <div class="control">
+                        <div class="select is-smallNOT">
+                            <select ng-model="itemData.elementObjectFitSelect" ng-change="okk('elementObjectFitSelect',itemData.elementObjectFitSelect)">
+                            <select ng-model="itemData.elementObjectFitSelect" ng-change="elementObjectFitSelect(itemData.elementObjectFitSelect)">
+                                <option value="contain">Contain</option>
+                                <option value="cover">Cover</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Image size (%) </label>
+                    <div class="control">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementDivitionSize" ng-change="okk('elementDivitionSize',itemData.elementDivitionSize)">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementDivitionSize" ng-change="elementDivitionSize(itemData.elementDivitionSize)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Font size (px)</label>
+                    <div class="control">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementFontSize" ng-change="okk('elementFontSize',itemData.elementFontSize)">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementFontSize" ng-change="elementFontSize(itemData.elementFontSize)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Border width (px)</label>
+                    <div class="control">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementBorderWidth" ng-change="okk('elementBorderWidth',itemData.elementBorderWidth)">
+                        <input class="input" type="number" placeholder="" ng-model="itemData.elementBorderWidth" ng-change="elementBorderWidth(itemData.elementBorderWidth)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Border color</label>
+                    <div class="control">
+                        <input type="color" id="base" value="#ff1493" ng-model="itemData.elementBorderColor" ng-change="okk('elementBorderColor',itemData.elementBorderColor)">
+                        <input type="color" id="base" value="#ff1493" ng-model="itemData.elementBorderColor" ng-change="elementBorderColor(itemData.elementBorderColor)">
+                    </div>
+                </div>
+            </form>
+
+            <div class="field" style="margin-top:40px;">
+                <div class="file is-info is-centered ">
+                    <label class="file-label">
+                        <input class="file-input" type="file" name="resume" id="itemImageInput">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                 Choose image
+                            </span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="field" style="margin-top: 50px;min-width: 100%;">
+                <div class="file is-centered is-normal is-boxed is-primary has-name">
+                    <label class="file-label">
+                        <input class="file-input" type="file" name="resume" id="itemImageInput" ng-model="itemData.image" ng-change="image(itemData.image)">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Choose an image
+                            </span>
+                        </span>
+                        <span ng-if="fileName" class="file-name" style="text-align: center;">
+                            {{fileName}}
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+        </div> -->
+    </div>
+</div>

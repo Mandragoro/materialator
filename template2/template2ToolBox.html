@@ -1,0 +1,271 @@
+<div class="item-toolbox template2ToolBox">
+
+    <div class="card">
+
+        <header class="card-header">
+            <span style="margin-left: 10px;" ng-if="isLocked" class="icon has-text-danger">
+                <i class="fas fa-lock"></i>
+            </span>
+            <p class="card-header-title">
+                Item {{itemId}} tools
+            </p>
+            <button class="delete" ng-click="close()"></button>
+        </header>
+
+
+
+
+
+
+
+
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm1}" ng-init="showForm1=true" ng-click="showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Item</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!showForm1">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="showForm1">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="toolbox-form-wrapper-content" ng-show="showForm1">
+                <div class="field">
+                    <label class="label">Border width (px)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2BorderWidth" ng-change="t2BorderWidth(itemData.t2BorderWidth)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2BorderWidth" ng-change="changeCSS('t2BorderWidth',itemData.t2BorderWidth)">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Border color</label>
+                    <div class="control">
+                        <!-- <input type="color" id="base" value="#ff1493" ng-model="itemData.t2BorderColor" ng-change="t2BorderColor(itemData.t2BorderColor)"> -->
+                        <input type="color" id="base" value="#ff1493" ng-model="itemData.t2BorderColor" ng-change="changeCSS('t2BorderColor',itemData.t2BorderColor)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm2}" ng-click="showForm2=!showForm2;showForm1=false;showForm3=false;showForm4=false;showForm5=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Border Image</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!showForm2">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="showForm2">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="toolbox-form-wrapper-content" ng-show="showForm2">
+                <div class="field">
+                    <label class="label">Border image size (%) </label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2BorderImageSize" ng-change="t2BorderImageSize(itemData.t2BorderImageSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2BorderImageSize" ng-change="changeCSS('t2BorderImageSize',itemData.t2BorderImageSize)">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="file is-info">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" id="t2borderImageInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Choose Image
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm3}" ng-click="showForm3=!showForm3;showForm1=false;showForm2=false;showForm4=false;showForm5=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Background</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!showForm3">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="showForm3">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="toolbox-form-wrapper-content" ng-show="showForm3">
+                <div class="field">
+                    <label class="label">Border radius (%) </label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundBorderRadius" ng-change="t2BackgroundBorderRadius(itemData.t2BackgroundBorderRadius)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundBorderRadius" ng-change="changeCSS('t2BackgroundBorderRadius',itemData.t2BackgroundBorderRadius)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Width (%) </label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundWidth" ng-change="t2BackgroundWidth(itemData.t2BackgroundWidth)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundWidth" ng-change="changeCSS('t2BackgroundWidth',itemData.t2BackgroundWidth)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Height (%) </label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundHeight" ng-change="t2BackgroundHeight(itemData.t2BackgroundHeight)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2BackgroundHeight" ng-change="changeCSS('t2BackgroundHeight',itemData.t2BackgroundHeight)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Color</label>
+                    <div class="control">
+                        <!-- <input type="color" id="base" value="#483d8b" ng-model="itemData.t2BackgroundColor" ng-change="t2BackgroundColor(itemData.t2BackgroundColor)"> -->
+                        <input type="color" id="base" value="#483d8b" ng-model="itemData.t2BackgroundColor" ng-change="changeCSS('t2BackgroundColor',itemData.t2BackgroundColor)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm4}" ng-click="showForm4=!showForm4;showForm1=false;showForm2=false;showForm3=false;showForm5=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Front Image</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!showForm4">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="showForm4">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="toolbox-form-wrapper-content" ng-show="showForm4">
+                <div class="field">
+                    <label class="label">Size (%)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImageSize" ng-change="t2FrontImageSize(itemData.t2FrontImageSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImageSize" ng-change="changeCSS('t2FrontImageSize',itemData.t2FrontImageSize)">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Position X (%)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImagePosX" ng-change="t2FrontImagePosX(itemData.t2FrontImagePosX)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImagePosX" ng-change="changeCSS('t2FrontImagePosX',itemData.t2FrontImagePosX)">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Position Y (%)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImagePosY" ng-change="t2FrontImagePosY(itemData.t2FrontImagePosY)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2FrontImagePosY" ng-change="changeCSS('t2FrontImagePosY',itemData.t2FrontImagePosY)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <my-input type="range" target-id="img" property="transform" property-value="rotate" label="Rotate" model="test1" min="0" max="360" value="0"></my-input>
+                </div>
+                <div class="field">
+                    <my-input type="range" target-id="img" property="filter" filter="blur" label="Blur" model="test2" min="0" max="30" value="0"></my-input>
+                </div>
+                <div class="field">
+                    <my-input type="range" target-id="img" property="filter" filter="brightness" label="Brightness" model="test3" min="0" max="200" value="100"></my-input>
+                </div>
+                <div class="field">
+                    <my-input type="range" target-id="img" property="filter" filter="contrast" label="Contrast" model="test4" min="0" max="200" value="100"></my-input>
+                </div>
+                <div class="field">
+                    <my-input type="range" target-id="img" property="filter" filter="sepia" label="Sepia" model="test5" min="0" max="100" value="0"></my-input>
+                </div>
+                <div class="field">
+                    <my-input type="range" target-id="img" property="filter" filter="hue-rotate" label="Hue-Rotate" model="test6" min="0" max="360" value="0"></my-input>
+                </div>
+
+                <div class="field">
+                    <div class="file is-info">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" id="t2frontImageInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Choose Image
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbox-form-wrapper">
+            <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm5}" ng-click="showForm5=!showForm5;showForm1=false;showForm2=false;showForm3=false;showForm4=false;">
+                <div class="form-wrapper-header-text">
+                    <p>Text</p>
+                </div>
+                <div class="form-wrapper-header-icon">
+                    <span class="icon" ng-if="!showForm5">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span class="icon" ng-if="showForm5">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="toolbox-form-wrapper-content" ng-show="showForm5">
+                <div class="field">
+                    <label class="label">Font size (px)</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FontSize" ng-change="t2FontSize(itemData.t2FontSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2FontSize" ng-change="changeCSS('t2FontSize',itemData.t2FontSize)">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Position X</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FontSize" ng-change="t2FontSize(itemData.t2FontSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2TextPosX" ng-change="changeCSS('t2TextPosX',itemData.t2TextPosX)">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Position Y</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FontSize" ng-change="t2FontSize(itemData.t2FontSize)"> -->
+                        <input class="input" type="number" placeholder="" ng-model="itemData.t2TextPosY" ng-change="changeCSS('t2TextPosY',itemData.t2TextPosY)">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Text</label>
+                    <div class="control">
+                        <!-- <input class="input" type="number" placeholder="" ng-model="itemData.t2FontSize" ng-change="t2FontSize(itemData.t2FontSize)"> -->
+                        <input class="input" type="text" placeholder="" ng-model="itemData.t2Text" ng-change="changeCSS('t2Text',itemData.t2Text)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>

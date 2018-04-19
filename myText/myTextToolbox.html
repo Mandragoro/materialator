@@ -1,0 +1,59 @@
+<!-- <div class="item-toolbox template2ToolBox">
+    <header class="card-header">
+        <span style="margin-left: 10px;" ng-if="isLocked" class="icon has-text-danger">
+            <i class="fas fa-lock"></i>
+        </span>
+        <p class="card-header-title">
+            Item {{itemId}} tools
+        </p>
+        <button class="delete" ng-click="close()"></button>
+    </header> -->
+
+    <div class="toolbox-form-wrapper">
+        <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm1}" ng-init="showForm1=true"
+            ng-click="showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+            <div class="form-wrapper-header-text" item-toolbox-hover>
+                <p>My Text</p>
+            </div>
+            <div class="form-wrapper-header-icon">
+                <span class="icon" ng-if="!showForm1">
+                    <i class="fas fa-chevron-down"></i>
+                </span>
+                <span class="icon" ng-if="showForm1">
+                    <i class="fas fa-chevron-up"></i>
+                </span>
+            </div>
+        </div>
+        <div class="toolbox-form-wrapper-content" ng-show="showForm1">
+
+            <div class="field">
+                <my-input type="range" target-id="text" property="transform" property-value="rotate" label="Rotate" model="test1" min="0" max="360" value="0"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="range" target-id="text" property="left" property-value="" label="Position X" model="test2" min="-100" max="100" value="0"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="range" target-id="text" property="bottom" property-value="" label="Position Y" model="test3" min="-100" max="100" value="0"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="range" target-id="text" property="fontSize" property-value="" label="Font size" model="test4" min="0" max="100" value="0"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="text" target-id="text" property="innerText" property-value="" label="Text" model="test5" value="My Text"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="color" target-id="text" property="color" property-value="" label="Font color" model="test6" value="#ff1493"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="range" target-id="text" property="borderWidth" label="Border width" model="test7" min="0" max="180" value="0"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="color" target-id="text" property="borderColor" property-value="" label="Border color" model="test8" value="#454545"></my-input>
+            </div>
+            <div class="field">
+                <my-input type="color" target-id="text" property="backgroundColor" property-value="" label="Background color" model="test9" value="#ff1493"></my-input>
+            </div>
+
+        </div>
+    </div>
+<!-- </div> -->
