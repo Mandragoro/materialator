@@ -11,6 +11,8 @@ angular.module('app', [])
         $scope.itemQuantity = 4;
         $scope.itemCounter = $scope.itemQuantity;
         $scope.itemSize = 9;
+        $scope.itemWidth = 9;
+        $scope.itemHeight = 9;
         $scope.fontSize = 60;
         $scope.divitionSize = 80;
         $scope.itemsArr = itemsArr;
@@ -45,11 +47,11 @@ angular.module('app', [])
         // -----------------------------------------------------------------------------------------
 
         // Load Image------------------------------------------------------------------------------
-        var input = angular.element(document.querySelector('#masterImageInput'));
-        input[0].addEventListener('change', function (event) {
-            console.log(event);
-            loadFiles(event, true)
-        });
+        // var input = angular.element(document.querySelector('#masterImageInput'));
+        // input[0].addEventListener('change', function (event) {
+        //     console.log(event);
+        //     loadFiles(event, true)
+        // });
 
         function loadFiles(event, input) {
             var file, name, reader, size, type;
@@ -138,6 +140,8 @@ angular.module('app', [])
             if ($scope.template === 'template1') {
                 $scope.itemQuantity = 4;
                 $scope.itemSize = 9;
+                $scope.itemWidth = 9;
+                $scope.itemHeight = 9;
                 $scope.fontSize = 60;
                 $scope.divitionSize = 80;
                 $scope.itemsArr = itemsArr;
@@ -147,6 +151,8 @@ angular.module('app', [])
                 $scope.rowGap = 1;
                 $scope.objectFitSelect = 'cover';
                 document.documentElement.style.setProperty('--item-size', $scope.itemSize + 'cm');
+                document.documentElement.style.setProperty('--item-width', $scope.itemWidth + 'cm');
+                document.documentElement.style.setProperty('--item-height', $scope.itemHeight + 'cm');
                 document.documentElement.style.setProperty('--font-size', $scope.fontSize + 'px');
                 document.documentElement.style.setProperty('--image-wrapper-size', $scope.divitionSize + '%');
                 document.documentElement.style.setProperty('--border-width', $scope.borderWidth + 'px');
@@ -157,6 +163,8 @@ angular.module('app', [])
             else if ($scope.template === 'template2') {
                 $scope.itemQuantity = 4;
                 $scope.itemSize = 9;
+                $scope.itemWidth = 9;
+                $scope.itemHeight = 9;
                 $scope.fontSize = 60;
                 $scope.divitionSize = 80;
                 $scope.itemsArr = itemsArr;
@@ -166,6 +174,8 @@ angular.module('app', [])
                 $scope.rowGap = 1;
                 $scope.objectFitSelect = 'cover';
                 document.documentElement.style.setProperty('--item-size', $scope.itemSize + 'cm');
+                document.documentElement.style.setProperty('--item-width', $scope.itemWidth + 'cm');
+                document.documentElement.style.setProperty('--item-height', $scope.itemHeight + 'cm');
                 document.documentElement.style.setProperty('--font-size', $scope.fontSize + 'px');
                 document.documentElement.style.setProperty('--image-wrapper-size', $scope.divitionSize + '%');
                 document.documentElement.style.setProperty('--border-width', $scope.borderWidth + 'px');
@@ -214,6 +224,8 @@ angular.module('app', [])
             var itemQuantity = $scope.itemQuantity;
             $scope.itemCounter = itemQuantity;
             var itemSize = $scope.itemSize;
+            var itemWidth = $scope.itemWidth;
+            var itemHeight = $scope.itemHeight;
             var fontSize = $scope.fontSize;
             var divitionSize = $scope.divitionSize;
             var borderWidth = $scope.borderWidth;
@@ -221,9 +233,25 @@ angular.module('app', [])
             var rowGap = $scope.rowGap;
             var objectFitSelect = $scope.objectFitSelect;
 
-            var rows = itemSize < 28 ? Math.floor(28.7 / (itemSize + rowGap)) : 1;
-            var cols = itemSize <= 19 ? Math.floor(19 / itemSize) : 1;
+            /*
+                page     21 cm
+                wrapper  18.9 cm
+        
+                2 itemss * 9 itemSize = 18 cm
+                3 itemss * 9 itemSize = 27 cm
+        
+                how many itemss per row?
+                itemss*itemSize /18.9
+            */
+
+            // var rows = itemSize < 28 ? Math.floor(28.7 / (itemSize + rowGap)) : 1;
+            // var cols = itemSize <= 19 ? Math.floor(19 / itemSize) : 1;
+            // var pages = Math.ceil(itemQuantity / (rows * cols));
+
+            var rows = itemHeight < 28 ? Math.floor(28.7 / (itemHeight + rowGap)) : 1;
+            var cols = itemWidth <= 19 ? Math.floor(19 / itemWidth) : 1;
             var pages = Math.ceil(itemQuantity / (rows * cols));
+
             $scope.rows = rows;
             $scope.cols = cols;
             $scope.pages = pages;
@@ -254,6 +282,8 @@ angular.module('app', [])
             ItemDataFactory.saveData(itemsArr);
 
             document.documentElement.style.setProperty('--item-size', itemSize + 'cm');
+            document.documentElement.style.setProperty('--item-width', itemWidth + 'cm');
+            document.documentElement.style.setProperty('--item-height', itemHeight + 'cm');
             document.documentElement.style.setProperty('--font-size', fontSize + 'px');
             document.documentElement.style.setProperty('--image-wrapper-size', divitionSize + '%');
             document.documentElement.style.setProperty('--border-width', borderWidth + 'px');
@@ -605,6 +635,7 @@ angular.module('app', [])
             }
         }
     })
+
     .directive('dragLine', function ($compile, $document, EditModeService) {
         return {
             restrict: 'A',
@@ -1097,6 +1128,7 @@ angular.module('app', [])
             }
         }
     })
+
     .directive('myDrop', function (MouseDownService, $document, $compile, EditModeService) {
         return {
             restrict: 'E',
@@ -1254,9 +1286,6 @@ angular.module('app', [])
                                     toolboxFormWrapper.attr('target-id', myImageController.callerId);
                                     toolboxClone.append(compiledCopy);
                                 })
-
-                                
-                                
                             }
 
                             // scope.itemNumber = myImageController.callerId;
@@ -1268,8 +1297,23 @@ angular.module('app', [])
                         }
                         else {
                             scope.elementObjectFitSelect = function (val) {
-                                console.log('No itemController here')
                                 console.log(val)
+                                // let targetId = [];
+
+                                let itemsCount = angular.element(document.querySelectorAll('.item'));
+                                let item1 = angular.element(document.querySelectorAll('#item1'));
+                                angular.element(function () {
+                                    let customTargetId = element.children().attr('target-id');
+                                    console.log(customTargetId);
+                                    for (let i = 1; i <= itemsCount.length; i++) {
+                                        let temp = angular.element(document.querySelectorAll('#img' + i + 'grid' + customTargetId))
+                                        if (temp.length > 0) {
+                                            // targetId.push(temp[0]);
+                                            temp.css({ objectFit: val });
+                                        }
+                                    }
+                                })
+
                             }
                         }
 
@@ -1322,21 +1366,47 @@ angular.module('app', [])
         }
     })
 
-    .directive('myTextToolbox', function (EditModeService) {
+    .directive('myTextToolbox', function ($compile,EditModeService) {
         return {
             restrict: 'E',
             replace: false,
-            require: '^?item',
+            scope: true,
+            require: ['^?item', '^?myText'],
             templateUrl: 'myText/myTextToolbox.html',
-            link: function (scope, element, attrs, itemController) {
-                if (itemController && EditModeService.status()===false){
+            link: function (scope, element, attrs, controllers) {
+
+                const itemController = controllers[0];
+                const myTextController = controllers[1];
+
+                if (itemController && EditModeService.status()===false) {
+
                     // console.log(EditModeService.status())
                     const itemToolboxCard = angular.element(document.querySelector('#itemToolboxCard' + itemController.itemNumber));
                     itemToolboxCard.append(element);
+
+                    if (parseInt(itemController.itemNumber) === 1) {
+                        const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
+                        const copy = angular.copy(element);
+
+                        let compiledCopy = $compile(copy)(scope);
+
+                        angular.element(function () {
+                            let toolboxFormWrapper = angular.element(compiledCopy[0].querySelector('.toolbox-form-wrapper'));
+                            toolboxFormWrapper.attr('target-id', myTextController.callerId);
+                            toolboxClone.append(compiledCopy);
+                        })
+                    }
                 }
-                else{
+                else {
                     // element.remove();
                 }
+
+                scope.$on('$destroy', function () {
+                    console.log('myTextToolbox scope destroyed');
+                })
+                element.on('$destroy', function () {
+                    console.log('myTextToolbox element destroyed');
+                })
             }
         }
     })
@@ -1357,11 +1427,6 @@ angular.module('app', [])
             },
             templateUrl: 'myText/myText.html',
             link: function (scope, element, attrs, controllers) {
-
-                // if (itemController) {
-                //     const img = angular.element(element[0].querySelector('#text'));
-                //     img[0].id = 'text' + itemController.itemNumber;
-                // }
 
                 const itemController = controllers[0];
                 const myTextController = controllers[1];
@@ -1409,6 +1474,11 @@ angular.module('app', [])
                                     <div class="toolbox-form-wrapper">
                                             <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm1}" ng-init="showForm1=true"
                                                 ng-click="showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+                                                <div class="pre-icon">
+                                                    <span class="icon">
+                                                        <i class="fas fa-square"></i>
+                                                    </span>
+                                                </div>
                                                 <div class="form-wrapper-header-text">
                                                     <p>Item</p>
                                                 </div>
@@ -1521,13 +1591,23 @@ angular.module('app', [])
             require: ['^^?item', '^^?myImage', '^^?myText'],
             replace: true,
             template:   `<div>
-                            <label class="label"></label>
+                            <div class="pre-icon">
+                                <span class="icon">
+                                    <i class="fas fa-image"></i>
+                                </span>
+                            </div>
+                            <div class="input-label">
+                                <label class="label"></label>
+                            </div>
                             <div>
-                                <input>
+                                <input style="margin-top: 10px;">
                             </div>
                         </div>`,
             compile: function (tele, tattr) {
                 // console.log('compile myInput')
+
+                let icon = angular.element(tele[0].querySelector('i'));
+                icon.attr('class', `{{${tattr.model}icon}}`);
 
                 let label = angular.element(tele[0].querySelector('.label'));
                 if (tattr.property !== 'innerText'){
@@ -1550,6 +1630,8 @@ angular.module('app', [])
                 else {
                     input.attr('type', `{{${tattr.model}type}}`);
                     input.attr('class', `file-input`);
+                    input.attr('multiple','');
+                    //TODO: add type image
                 }
 
                 return {
@@ -1577,6 +1659,7 @@ angular.module('app', [])
                         scope[attrs.model + 'units'] = '';
                         scope[attrs.model + 'min'] = attrs.min;
                         scope[attrs.model + 'max'] = attrs.max;
+                        scope[attrs.model + 'icon'] = attrs.icon;
 
                         let filter = attrs.filter;
                         let propertyValue = attrs.propertyValue;
@@ -1620,26 +1703,22 @@ angular.module('app', [])
                             let customImagesCount = angular.element(item1[0].querySelectorAll('img'));
                             let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
 
-                            // console.log(itemsCount.length)
-                            // console.log(customImagesCount.length)
-                            // console.log(customTextCount.length)
-                            // console.log('getCurrentCustomImageId()', CurrentStateService.getCurrentCustomImageId())
-                            angular.element(function(){
-                                let customTargetId = element.parent().parent().parent().attr('target-id');
-                                // console.log(customTargetId);
+                            angular.element(function() {
+                                let customTargetId = null;
+                                if (attrs.type !== 'file') {
+                                    customTargetId = element.parent().parent().parent().attr('target-id');
+                                }
+                                else {
+                                    customTargetId = element.parent().parent().parent().parent().parent().attr('target-id');
+                                }
+                                
                                 for (let i = 1; i <= itemsCount.length; i++) {
-                                    // for (let j = 0; j < customImagesCount.length; j++) {
-                                        let temp = angular.element(document.querySelectorAll('#img' + i + 'grid' + customTargetId))
-                                        if(temp.length>0){
-                                            targetId.push(temp[0]);
-                                        }
-                                    // }
+                                    let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + + i + 'grid' + customTargetId));
+                                    if (temp.length > 0) {
+                                        targetId.push(temp[0]);
+                                    }
                                 }
                             })
-
-                            // targetId = angular.element(document.querySelectorAll('#img1grid2'));
-                            // targetId = customImagesCount;
-                            // console.log(targetId)
                         }
 
                         if (attrs.property === 'filter') {
@@ -1670,6 +1749,7 @@ angular.module('app', [])
                                 case 'transform': transform(val); break;
                                 case 'left': left(val); scope[attrs.model + 'units'] = '%'; break;
                                 case 'bottom': bottom(val); scope[attrs.model + 'units'] = '%'; break;
+                                case 'width': width(val); scope[attrs.model + 'units'] = '%'; break;
                                 case 'fontSize': fontSize(val); scope[attrs.model + 'units'] = 'px'; break;
                                 case 'color': fontColor(val); break;
                                 case 'backgroundColor': backgroundColor(val); break;
@@ -1723,7 +1803,6 @@ angular.module('app', [])
                         function transform(val) {
 
                             for (let i = 0; i < targetId.length; i++) {
-                                // console.log(targetId)
                                 targetId[i].style.transform = attrs.propertyValue + '(' + val + units + ')';
                                 if (itemController) {
                                     ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1732,35 +1811,93 @@ angular.module('app', [])
                         }
 
                         function left(val) {
-                            targetId[0].style.left = val + '%';
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].style.left = val + '%';
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].style.left = val + '%';
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function bottom(val) {
-                            targetId[0].style.bottom = val + '%';
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].style.bottom = val + '%';
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].style.bottom = val + '%';
+                            // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                        }
+                        function width(val) {
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].style.width = val + '%';
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].style.width = val + '%';
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function fontSize(val) {
-                            targetId[0].style.fontSize = val + 'px';
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].style.fontSize = val + 'px';
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].style.fontSize = val + 'px';
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function fontColor(val) {
-                            targetId[0].style.color = val;
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].style.color = val;
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].style.color = val;
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function backgroundColor(val) {
-                            targetId.parent().parent()[0].style.backgroundColor = val;
+                            for (let i = 0; i < targetId.length; i++) {
+                                angular.element(targetId[i]).parent().parent()[0].style.backgroundColor = val;
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId.parent().parent()[0].style.backgroundColor = val;
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function borderColor(val) {
-                            targetId.parent().parent()[0].style.borderColor = val;
+                            for (let i = 0; i < targetId.length; i++) {
+                                angular.element(targetId[i]).parent().parent()[0].style.borderColor = val;
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId.parent().parent()[0].style.borderColor = val;
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function borderWidth(val) {
-                            targetId.parent().parent()[0].style.borderWidth = val+'px';
+                            for (let i = 0; i < targetId.length; i++) {
+                                angular.element(targetId[i]).parent().parent()[0].style.borderWidth = val + 'px';
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId.parent().parent()[0].style.borderWidth = val+'px';
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function innerText(val) {
-                            targetId[0].innerText = val;
+                            for (let i = 0; i < targetId.length; i++) {
+                                targetId[i].innerText = val;
+                                if (itemController) {
+                                    ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                }
+                            }
+                            // targetId[0].innerText = val;
                             // targetId.parent().parent()[0].style.borderWidth = val+'px';
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
@@ -1768,28 +1905,52 @@ angular.module('app', [])
                         if (attrs.type === 'file') {
                             // var input = angular.element(element[0].querySelector('#itemImageInput'));
                             var input = element;
-                            input.on('change', function (event) {
+                            
                                 if (itemController) {
-                                    let itemArrPosI = itemController.itemArrPosI; let itemArrPosJ = itemController.itemArrPosJ;
-                                    scope.isLocked = true;
-                                    ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'isLocked');
+                                    input.on('change', function (event) {
+                                        let itemArrPosI = itemController.itemArrPosI; let itemArrPosJ = itemController.itemArrPosJ;
+                                        scope.isLocked = true;
+                                        ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'isLocked');
 
-                                    ImageReaderFactory.readFile(event, true).then(function (data) {
-                                        ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
-                                        ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
-                                        scope.fileName = data.name;
+                                        ImageReaderFactory.readFile(event, true).then(function (data) {
+                                            ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
+                                            ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
+                                            scope.fileName = data.name;
 
-                                        targetId[0].src = data.blob;
+                                            targetId[0].src = data.blob;
 
-                                        // ImageReaderFactory.createCanvas(data.blob, itemNumber).then(function (canvas) {
-                                        //     console.log(canvas);
-                                        //     console.log(targetId[0]);
-                                        //     // angular.element(document.querySelector("#img" + itemNumber))[0].replaceWith(canvas);
-                                        //     targetId[0].replaceWith(canvas);
-                                        // })
-                                    })
+                                            // ImageReaderFactory.createCanvas(data.blob, itemNumber).then(function (canvas) {
+                                            //     console.log(canvas);
+                                            //     console.log(targetId[0]);
+                                            //     // angular.element(document.querySelector("#img" + itemNumber))[0].replaceWith(canvas);
+                                            //     targetId[0].replaceWith(canvas);
+                                            // })
+                                        })
+                                    });
                                 }
-                            });
+                                else {
+
+                                    // angular.element(function() {
+                                        input.on('change', function (event) {
+                                            event.preventDefault();
+                                            ImageReaderFactory.readFile(event, true).then(function (data) {
+                                                // ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
+                                                // ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
+                                                // scope.fileName = data.name;
+                                                
+                                                for (let i = 0; i < targetId.length; i++) {
+                                                    if(data[i] && data.length !== 'undefined') {
+                                                        targetId[i].src = data[i].$$state.value.blob;
+                                                    }
+                                                    else{
+                                                        targetId[i].src = data.blob;
+                                                    }
+                                                }
+                                            })
+                                        });
+                                    // })
+                                }
+                            
                         }
                         
                     }
@@ -2677,7 +2838,7 @@ angular.module('app', [])
                 { id: 2, isTest: false, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test2", isLocked: false, img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, css: { elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' } },
                
                 {
-                    id: 3, isCustom: false, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png", frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false, 
+                    id: 3, isCustom: true, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png", frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false, 
                 
                      css: { 
                         t2BorderImageSize: 'var(--t2BorderImageSize)',
@@ -2897,22 +3058,64 @@ angular.module('app', [])
                 let defer = $q.defer();
                 let file, name, reader, size, type;
                 file = input ? event.target.files : event.dataTransfer.files;
-                reader = new FileReader();
-                reader.file = file[0];
+                // reader = new FileReader();
 
-                reader.onload = function (evt) {
-                    let fname = this.file.name;
-                    let fsize = Math.round(this.file.size / 1024) + ' KB';
-                    let fileRed = { blob: evt.target.result, name: fname, size: fsize };
-                    defer.resolve(fileRed);
+                if (file.length === 1) {
+                    reader = new FileReader();
+                    reader.file = file[0];
+
+                    reader.onload = function (evt) {
+                        let fname = this.file.name;
+                        let fsize = Math.round(this.file.size / 1024) + ' KB';
+                        let fileRed = { blob: evt.target.result, name: fname, size: fsize };
+                        defer.resolve(fileRed);
+                    }
+
+                    name = file[0].name;
+                    type = file[0].type;
+                    size = file[0].size;
+                    reader.readAsDataURL(file[0]);
+
+                    return defer.promise;
                 }
+                else {
 
-                name = file[0].name;
-                type = file[0].type;
-                size = file[0].size;
-                reader.readAsDataURL(file[0]);
+                    let promises = [];
+                    // let fileRedArr = [];
 
-                return defer.promise;
+                    for (var i = 0; i < file.length; i++) {
+                        var imageFile = file[i];
+                        var promise = readImageAsPromise(imageFile, i);
+                        promises.push(promise);
+                    }
+
+                    $q.all(promises).then(function () {
+                        console.log("IMAGES RED SUCCESSFULY!!!!");
+                        defer.resolve(promises);
+                    });
+
+                    function readImageAsPromise(imageFile, index) {
+                        
+                        return $q(function (resolve, reject) {
+                            reader = new FileReader();
+                            reader.file = imageFile;
+
+                            reader.onload = function (evt) {
+                                let fname = this.file.name;
+                                let fsize = Math.round(this.file.size / 1024) + ' KB';
+                                // fileRedArr.push({ blob: evt.target.result, name: fname, size: fsize });
+                                resolve({ blob: evt.target.result, name: fname, size: fsize });
+                            }
+
+                            name = imageFile.name;
+                            type = imageFile.type;
+                            size = imageFile.size;
+                            reader.readAsDataURL(file[i]);
+                        })
+
+                    }
+                    return defer.promise;
+                }
             },
 
             createCanvas: function(blob, itemNumber){

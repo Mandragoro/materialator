@@ -115,51 +115,117 @@
                     </span>
                   </div>
                 </div>
-                <div class="accordion-content" ng-show="show1">
+                <div class="accordion-content general-tools" ng-show="show1">
 
                   <div class="field">
-                    <label class="label">Items</label>
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-sort-numeric-down"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Items quantity</label>
+                    </div>
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="itemQuantity" ng-change="ok()">
                     </div>
                   </div>
 
-                  <div class="field">
+                  <!-- <div class="field">
                     <label class="label">Item size (cm)</label>
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="itemSize" ng-change="ok()">
                     </div>
+                  </div> -->
+                  <div class="field">
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-arrows-alt-h"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Item width</label>
+                    </div>
+                    <!-- <label class="label">Item width (cm)</label> -->
+                    <div class="control">
+                      <input class="input" type="number" placeholder="" ng-model="itemWidth" ng-change="ok()">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-arrows-alt-v"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Item heigt (cm)</label>
+                    </div>
+                    <!-- <label class="label">Item heigt (cm)</label> -->
+                    <div class="control">
+                      <input class="input" type="number" placeholder="" ng-model="itemHeight" ng-change="ok()">
+                    </div>
                   </div>
                   
                   <div class="field">
-                    <label class="label">Row gap (cm)</label>
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-minus"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Row gap (cm)</label>
+                    </div>
+                    <!-- <label class="label">Row gap (cm)</label> -->
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="rowGap" ng-change="ok()">
                     </div>
                   </div>
 
-                  <div class="field">
-                    <label class="label">Font size (px)</label>
+                  <!-- <div class="field">
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-text-height"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Font size (px)</label>
+                    </div>
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="fontSize" ng-change="ok()">
                     </div>
-                  </div>
+                  </div> -->
               
                   <div class="field">
-                    <label class="label">Border width (px)</label>
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-expand"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Border width (px)</label>
+                    </div>
+                    <!-- <label class="label">Border width (px)</label> -->
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="borderWidth" ng-change="ok()">
                     </div>
                   </div>
               
                   <div class="field">
-                    <label class="label">Border color</label>
+                    <div class="pre-icon">
+                      <span class="icon">
+                        <i class="fas fa-paint-brush"></i>
+                      </span>
+                    </div>
+                    <div class="input-label">
+                      <label class="label">Border color</label>
+                    </div>
+                    <!-- <label class="label">Border color</label> -->
                     <div class="control">
                       <input type="color" id="base" value="#ff1493" ng-model="borderColor" ng-change="ok()">
                     </div>
                   </div>
 
-                  <div class="field">
+                  <!-- <div class="field">
                     <div class="file is-info is-centered">
                       <label class="file-label">
                         <input class="file-input" type="file" name="resume" id="masterImageInput">
@@ -173,7 +239,7 @@
                         </span>
                       </label>
                     </div>
-                  </div>
+                  </div> -->
 
                 </div>
 
@@ -224,7 +290,7 @@
 
                 <div class="accordion-button" ng-class="{'accordion-button-shadow': show3}" ng-init="show3=false;" ng-click="show3=!show3;show1=false;show2=false;">
                   <span class="icon">
-                    <i class="fas fa-object-group"></i>
+                    <i class="far fa-object-group"></i>
                   </span>
                   <div class="accordion-button-text">
                     <p class="accordion-button-title">Custom Template Options</p>

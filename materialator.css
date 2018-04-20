@@ -1,4 +1,7 @@
 :root {
+    --column-left-width: 17%;
+    --column-left-min-width: 360px;
+    --column-left-max-width: 360px;
     /* --iner-shadow: inset 0px 15px 8px -10px #333333, inset 0px -15px 8px -10px #333333; */
     --iner-shadow: inset 0px 20px 20px -20px #000000, inset 0px -20px 20px -20px black;
     /* --html-color: lightslategrey; */
@@ -13,6 +16,8 @@
     --drop-zone-grid-item-font-size:30px;
 
     --item-size: 9cm;
+    --item-width: 9cm;
+    --item-height: 9cm;
     --font-size: 60px;
     --image-wrapper-size: 80%;
     --border-width: 2px;
@@ -230,14 +235,16 @@ body{
     bottom: 0px;
     min-height: 100%;
     /* width: 295px; */
-    width: 20%;
-    min-width: 320px;
+    width: var(--column-left-width);
+    min-width: var(--column-left-min-width);
+    max-width: var(--column-left-max-width);
     background-size: cover;
 }
 .column-c{
     display: block;
-    width: 20%;
-    min-width: 320px;
+    width: var(--column-left-width);
+    min-width: var(--column-left-min-width);
+    max-width: var(--column-left-max-width);
     /* min-height: 100%; */
     float: left;
     padding: 15px;
@@ -308,13 +315,13 @@ body{
     border-radius: 0px;
     border: solid 0px #454545;
 }
-.accordion-content .item-toolbox .card .toolbox-form-wrapper-header{
+.accordion-content  .toolbox-form-wrapper-header{
     /* background-color: #766ea8; */
     /* background-color: #575274; */
     background-color: var(--accordion-sub-item);
     /* color: aliceblue; */
     color: var(--accordion-sub-item-text);
-    padding-left: 14%;
+    padding-left: 5%;
     padding-right: 3%;
     height: 53px;
 }
@@ -352,8 +359,9 @@ body{
 /* End of Accordion for column tools----------- */
 .column-tools{
     display: block;
-    width: 20%;
-    min-width: 320px;
+    width: var(--column-left-width);
+    min-width: var(--column-left-min-width);
+    max-width: var(--column-left-max-width);
     min-height: 100%;
     float: left;
     position: fixed;
@@ -399,9 +407,19 @@ body{
     float: left;
     /* border-bottom: solid 1px;
     border-color: #008b8b96; */
-    padding: 5%;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+
+    /* display:flex;
+    align-items: center;
+    justify-content: center; */
+}
+.column-tools .general-tools .field{
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
 .column-tools .field:last-child{
     border-bottom: none;
@@ -425,7 +443,7 @@ body{
     max-width: 100%;
 }
 input[type="color"]{
-    display: block;
+    /* display: block; */
     width: 100%;
     height: 30px;
     border-radius: 3px;
@@ -525,7 +543,15 @@ input[type="color"]{
     position: relative;
     padding: 4%;
     cursor: pointer;
-    /* height: 54px; */
+
+    display: block;
+    width: 100%;
+    height: 53px;
+    float: left;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
 }
 .toolbox-form-wrapper-header-selected{
     border-left: none;
@@ -544,11 +570,19 @@ input[type="color"]{
 .form-wrapper-header-text{
     width: 90%;
     float: left;
-    /* font-weight: 700; */
     font-weight: bold;
 }
+.form-wrapper-header-text p{
+    margin-left: 10px;
+}
 .form-wrapper-header-icon{
-    width: 0%;
+    /* width: 0%; */
+}
+.toolbox-form-wrapper .pre-icon{
+    width: 5%;
+    min-width: 25px;
+    display: block;
+    float: left;
 }
 .toolbox-form-wrapper-content{
     animation: slide-down .5s ease-in;
@@ -561,6 +595,12 @@ input[type="color"]{
     background-color: #454545;
     color: #ae9e9f;
     overflow: hidden;
+}
+.input-label{
+    width: 80%;
+    display: block;
+    float: left;
+    margin-left: 5px;
 }
 #itemToolBoxIncludeWrapper .item-toolbox .card:last-child .toolbox-form-wrapper:last-child .toolbox-form-wrapper-content{
     box-shadow: inset 0px 20px 20px -20px #000000;
@@ -602,8 +642,10 @@ input[type="color"]{
 }
 .grid-wrapper{
     display: grid;
-    grid-auto-rows: var(--item-size);
-    grid-template-columns: repeat(auto-fill, var(--item-size));
+    /* grid-auto-rows: var(--item-size);
+    grid-template-columns: repeat(auto-fill, var(--item-size)); */
+    grid-auto-rows: var(--item-height);
+    grid-template-columns: repeat(auto-fill, var(--item-width));
     grid-auto-flow: row;
     /* grid-gap: 3em 3em; */
     /* grid-row-gap: 1em; */
@@ -612,6 +654,7 @@ input[type="color"]{
     justify-content: space-evenly;
     max-width: 20cm;
     max-height: 28.7cm;
+    /* overflow: hidden; */
     /* margin: auto; */
 }
 .modal-grid{
@@ -685,8 +728,8 @@ input[type="color"]{
     padding: 5px;
     font-size: var(--font-size);
     display:flex;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
+    align-items: center;
+    justify-content: center;
 }
 .text-box span{
     max-height: 100%;
