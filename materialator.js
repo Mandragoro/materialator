@@ -3,7 +3,7 @@ angular.module('app', [])
         $templateCache.put('itemTB.html', "<div id='itemToolBoxIncludeWrapper'><ng-include src=\"'itemToolBox.html'\"></ng-include></div>");
         // $templateCache.put('template1.html');
     })
-    .controller('MyController', function ($scope, $templateCache, $compile, ItemDataFactory) {
+    .controller('MyController', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
         $scope.caca = 5;
 
         var itemsArr = ItemDataFactory.getData();
@@ -233,17 +233,6 @@ angular.module('app', [])
             var rowGap = $scope.rowGap;
             var objectFitSelect = $scope.objectFitSelect;
 
-            /*
-                page     21 cm
-                wrapper  18.9 cm
-        
-                2 itemss * 9 itemSize = 18 cm
-                3 itemss * 9 itemSize = 27 cm
-        
-                how many itemss per row?
-                itemss*itemSize /18.9
-            */
-
             // var rows = itemSize < 28 ? Math.floor(28.7 / (itemSize + rowGap)) : 1;
             // var cols = itemSize <= 19 ? Math.floor(19 / itemSize) : 1;
             // var pages = Math.ceil(itemQuantity / (rows * cols));
@@ -324,37 +313,6 @@ angular.module('app', [])
                 scope.scrollUp = function () {
                     document.body.scrollTop = 0;
                     document.documentElement.scrollTop = 0;
-                }
-            }
-        }
-    })
-
-    .directive('itemReady', function ($compile) {
-        return {
-            restrict: 'A',
-            compile: function (tele, tattr) {
-                return {
-                    pre: function() {
-
-                    },
-                    post: function (scope, element, attrs) {
-
-                        // scope.$on('cagada', function(event, data) {
-                        //     console.log('hello brodcast',data)
-
-                        //     const itemToolboxCard1 = angular.element(document.querySelector('#itemToolboxCard1'));
-                        //     const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
-                        //     const copy = angular.copy(itemToolboxCard1)
-                        //     console.log(copy[0]);
-                        //     toolboxClone.append($compile(copy)(scope));
-
-                        //     for (let i = 1; i <= scope.itemQuantity; i++) {
-                        //         targetId = angular.element(document.querySelectorAll( '#img'+ i +'grid'+ 1 ));
-                        //         console.log(targetId)
-                        //     }
-                        // })
-
-                    }
                 }
             }
         }
@@ -1645,6 +1603,7 @@ angular.module('app', [])
                         const myImageController = controllers[1];
                         const myTextController = controllers[2];
                         let callerId = null;
+                        let pagesCount = angular.element(document.querySelectorAll('.page')).length;
                         
                         if (myImageController) {
                             callerId = parseInt(myImageController.callerId);
@@ -1698,12 +1657,23 @@ angular.module('app', [])
                             }
                         }
                         else {
-                            let itemsCount = angular.element(document.querySelectorAll('.item'));
-                            let item1 = angular.element(document.querySelectorAll('#item1'));
-                            let customImagesCount = angular.element(item1[0].querySelectorAll('img'));
-                            let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
+                            getCustomTargets();
+                        }
 
-                            angular.element(function() {
+                        function getCustomTargets() {
+                            let itemsCount = angular.element(document.querySelectorAll('.item'));
+                            let pagesCountCheck = angular.element(document.querySelectorAll('.page')).length;
+                            if (pagesCountCheck === pagesCount && itemsCount.length === targetId.length) {
+                                return;
+                            }
+                            pagesCount = pagesCountCheck;
+                            
+                            targetId = [];
+                            let item1 = angular.element(document.querySelectorAll('#item1'));
+                            // let customImagesCount = angular.element(item1[0].querySelectorAll('img'));
+                            // let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
+
+                            angular.element(function () {
                                 let customTargetId = null;
                                 if (attrs.type !== 'file') {
                                     customTargetId = element.parent().parent().parent().attr('target-id');
@@ -1711,13 +1681,15 @@ angular.module('app', [])
                                 else {
                                     customTargetId = element.parent().parent().parent().parent().parent().attr('target-id');
                                 }
-                                
+
                                 for (let i = 1; i <= itemsCount.length; i++) {
                                     let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + + i + 'grid' + customTargetId));
                                     if (temp.length > 0) {
                                         targetId.push(temp[0]);
                                     }
                                 }
+                                // console.log('itemsCount.length', itemsCount.length)
+                                // console.log('targetId.length  ', targetId.length)
                             })
                         }
 
@@ -1744,6 +1716,9 @@ angular.module('app', [])
                         }
 
                         scope[attrs.model + 'change'] = function (val) {
+                            if (!itemController) {
+                                getCustomTargets();
+                            }
                             switch (attrs.property) {
                                 case 'filter': cahngeFilter(val); break;
                                 case 'transform': transform(val); break;
@@ -2015,8 +1990,11 @@ angular.module('app', [])
                             // let targetId = '#img' + itemController.itemNumber + 'grid' + myImageController.callerId;
                             let itemToolbox = angular.element(document.querySelector('#itemToolbox' + iitemController.itemNumber));
                             itemToolbox.remove();
-                            const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
-                            toolboxClone.contents().remove();
+                            
+                            if (iitemController.itemNumber === 1) {
+                                const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
+                                toolboxClone.contents().remove();
+                            }
                         })
                         ielement.on('$destroy', function () {
                             console.log('itemSelect ' + 'itemNumber' + ' element destroyed');
@@ -2833,14 +2811,28 @@ angular.module('app', [])
     .factory('ItemDataFactory', function () {
         var itemsArr = [
             [
-                { id: 1, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test1", isLocked: false, img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, css: { elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' } },
+                { 
+                    id: 1, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test1", isLocked: false,
+                    img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
+                    css: { 
+                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+                    } 
+                },
                 
-                { id: 2, isTest: false, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test2", isLocked: false, img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, css: { elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' } },
+                { 
+                    id: 2, isTest: false, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test2", isLocked: false, 
+                    img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
+                    css: { 
+                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+                    } 
+                },
                
                 {
-                    id: 3, isCustom: true, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png", frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false, 
-                
-                     css: { 
+                    id: 3, isCustom: true, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png",
+                    frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false,
+                    css: {
                         t2BorderImageSize: 'var(--t2BorderImageSize)',
                         t2BackgroundColor: 'var(--t2BackgroundColor)',
                         t2BackgroundBorderRadius: 'var(--t2BackgroundBorderRadius)',
@@ -2857,7 +2849,14 @@ angular.module('app', [])
                     } 
                 },
                 
-                { id: 4, isCustom: true, template: 'template1', name: "test4", isLocked: false, img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, css: { elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' } },
+                { 
+                    id: 4, isCustom: true, template: 'template1', name: "test4", isLocked: false, img: "images/127458.jpg", 
+                    borderImg: "images/127458.jpg", imgIsLocked: false, 
+                    css: { 
+                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+                    } 
+                }
             
             ]
         ];
@@ -2945,13 +2944,16 @@ angular.module('app', [])
     })
 
     .factory('CurrentStateService', function () {
-        let currentCustomImageId = 0;
+        let pageHasChanges = true;
+        let itemStatus = {1: true};
         return {
-            setCurrentCustomImageId: function(val){
-                currentCustomImageId = val;
+            setPageHasChanges: function (itemQuantity) {
+                for (let i = 1; i <= itemQuantity; i++) {
+                    itemStatus[i] = true;
+                }
             },
-            getCurrentCustomImageId: function () {
-                return currentCustomImageId;
+            getPageHasChanges: function (itemNumber) {
+                return itemStatus[itemNumber];
             }
         }
     })
