@@ -492,7 +492,8 @@ angular.module('app', [])
                         display: 'flex',
                         alignContent: 'center',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        overflow: 'hidden'
                     })
                     dropZoneGridItem.removeAttr('ng-repeat');
                     dropZoneGridItem.removeClass('drop-zone-grid-item');
@@ -1343,6 +1344,7 @@ angular.module('app', [])
                     itemToolboxCard.append(element);
 
                     if (parseInt(itemController.itemNumber) === 1) {
+                        
                         const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
                         const copy = angular.copy(element);
 
@@ -1604,6 +1606,7 @@ angular.module('app', [])
                         const myTextController = controllers[2];
                         let callerId = null;
                         let pagesCount = angular.element(document.querySelectorAll('.page')).length;
+                        let columnA = angular.element(document.querySelectorAll('.column-a'));
                         
                         if (myImageController) {
                             callerId = parseInt(myImageController.callerId);
@@ -1626,6 +1629,7 @@ angular.module('app', [])
                         let newString = '';
                         let units = '';
                         let targetId = [];
+                        let customTargetId = null;
                         let itemArrPosI = null;
                         let itemArrPosJ = null;
                         
@@ -1663,10 +1667,20 @@ angular.module('app', [])
                         function getCustomTargets() {
                             let itemsCount = angular.element(document.querySelectorAll('.item'));
                             let pagesCountCheck = angular.element(document.querySelectorAll('.page')).length;
-                            if (pagesCountCheck === pagesCount && itemsCount.length === targetId.length) {
-                                return;
+
+                            // Check if targetID's are in the DOM, changing pages removes some nodes
+                            for (let k = 0; k < targetId.length; k++) {
+                                if (columnA[0].contains(targetId[k]) === false) {
+                                    break;
+                                }
+                                else if (columnA[0].contains(targetId[k]) === true && k === targetId.length-1) {
+                                    return;
+                                }
                             }
-                            pagesCount = pagesCountCheck;
+                            // if (pagesCountCheck === pagesCount && itemsCount.length === targetId.length) {
+                            //     return;
+                            // }
+                            // pagesCount = pagesCountCheck;
                             
                             targetId = [];
                             let item1 = angular.element(document.querySelectorAll('#item1'));
@@ -1674,7 +1688,7 @@ angular.module('app', [])
                             // let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
 
                             angular.element(function () {
-                                let customTargetId = null;
+                                customTargetId = null;
                                 if (attrs.type !== 'file') {
                                     customTargetId = element.parent().parent().parent().attr('target-id');
                                 }
@@ -1689,7 +1703,7 @@ angular.module('app', [])
                                     }
                                 }
                                 // console.log('itemsCount.length', itemsCount.length)
-                                // console.log('targetId.length  ', targetId.length)
+                                // console.log('targetId.length  ', targetId)
                             })
                         }
 
@@ -1776,9 +1790,11 @@ angular.module('app', [])
                         }
 
                         function transform(val) {
-
                             for (let i = 0; i < targetId.length; i++) {
                                 targetId[i].style.transform = attrs.propertyValue + '(' + val + units + ')';
+                                // console.log('targetId[i]', targetId[i]);
+                                // console.log('attrs.targetId', attrs.targetId);
+                                // console.log('customTargetId', customTargetId);
                                 if (itemController) {
                                     ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                                 }
@@ -2809,55 +2825,264 @@ angular.module('app', [])
     })
 
     .factory('ItemDataFactory', function () {
+        // var itemsArr = [
+        //     [
+        //         { 
+        //             id: 1, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test1", isLocked: false,
+        //             img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
+        //             css: { 
+        //                 elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+        //                 elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+        //             } 
+        //         },
+                
+        //         { 
+        //             id: 2, isTest: false, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test2", isLocked: false, 
+        //             img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
+        //             css: { 
+        //                 elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+        //                 elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+        //             } 
+        //         },
+               
+        //         {
+        //             id: 3, isCustom: true, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png",
+        //             frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false,
+        //             css: {
+        //                 t2BorderImageSize: 'var(--t2BorderImageSize)',
+        //                 t2BackgroundColor: 'var(--t2BackgroundColor)',
+        //                 t2BackgroundBorderRadius: 'var(--t2BackgroundBorderRadius)',
+        //                 t2BackgroundWidth: 'var(--t2BackgroundWidth)',
+        //                 t2BackgroundHeight: 'var(--t2BackgroundHeight)',
+        //                 t2FrontImageSize: 'var(--t2FrontImageSize)',
+        //                 t2FrontImagePosX: 'var(--t2FrontImagePosX)',
+        //                 t2FrontImagePosY: 'var(--t2FrontImagePosY)',
+        //                 t2FontSize: "var(--t2FontSize)",
+        //                 t2BorderWidth: 'var(--t2BorderWidth)',
+        //                 t2BorderColor: 'var(--t2BorderColor)',
+        //                 t2TextPosX: 'var(--t2TextPosX)',
+        //                 t2TextPosY: 'var(--t2TextPosY)'
+        //             } 
+        //         },
+                
+        //         { 
+        //             id: 4, isCustom: true, template: 'template1', name: "test4", isLocked: false, img: "images/127458.jpg", 
+        //             borderImg: "images/127458.jpg", imgIsLocked: false, 
+        //             css: { 
+        //                 elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
+        //                 elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
+        //             } 
+        //         }
+            
+        //     ]
+        // ];
+
         var itemsArr = [
             [
-                { 
-                    id: 1, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test1", isLocked: false,
-                    img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
-                    css: { 
-                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
-                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
-                    } 
-                },
-                
-                { 
-                    id: 2, isTest: false, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test2", isLocked: false, 
-                    img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, 
-                    css: { 
-                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
-                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
-                    } 
-                },
-               
                 {
-                    id: 3, isCustom: true, template: 'template2', name: "test3", isLocked: false, borderImg: "images/YellowFlower_39.png",
-                    frontImg: "images/valentine-bee-freebie3_WhimsyClips.png", imgIsLocked: false,
-                    css: {
-                        t2BorderImageSize: 'var(--t2BorderImageSize)',
-                        t2BackgroundColor: 'var(--t2BackgroundColor)',
-                        t2BackgroundBorderRadius: 'var(--t2BackgroundBorderRadius)',
-                        t2BackgroundWidth: 'var(--t2BackgroundWidth)',
-                        t2BackgroundHeight: 'var(--t2BackgroundHeight)',
-                        t2FrontImageSize: 'var(--t2FrontImageSize)',
-                        t2FrontImagePosX: 'var(--t2FrontImagePosX)',
-                        t2FrontImagePosY: 'var(--t2FrontImagePosY)',
-                        t2FontSize: "var(--t2FontSize)",
-                        t2BorderWidth: 'var(--t2BorderWidth)',
-                        t2BorderColor: 'var(--t2BorderColor)',
-                        t2TextPosX: 'var(--t2TextPosX)',
-                        t2TextPosY: 'var(--t2TextPosY)'
-                    } 
+                    id: 1, isCustom: true, isLocked: false,
+                    customElements: {
+                        myImage1: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myImage2: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myText1: {
+                            style: {
+                                fontSize: '4px',
+                                color: 'rgb(39, 235, 73)',
+                                transform: 'rotate(52deg)',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            text: "my text"
+                        }
+                    }
                 },
-                
-                { 
-                    id: 4, isCustom: true, template: 'template1', name: "test4", isLocked: false, img: "images/127458.jpg", 
-                    borderImg: "images/127458.jpg", imgIsLocked: false, 
-                    css: { 
-                        elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', 
-                        elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' 
-                    } 
-                }
-            
+
+                {
+                    id: 2, isCustom: true, isLocked: false,
+                    customElements: {
+                        myImage1: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myImage2: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myText1: {
+                            style: {
+                                fontSize: '4px',
+                                color: 'rgb(39, 235, 73)',
+                                transform: 'rotate(52deg)',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            text: "my text"
+                        }
+                    }
+                },
+
+                {
+                    id: 3, isCustom: true, isLocked: false,
+                    customElements: {
+                        myImage1: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myImage2: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myText1: {
+                            style: {
+                                fontSize: '4px',
+                                color: 'rgb(39, 235, 73)',
+                                transform: 'rotate(52deg)',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            text: "my text"
+                        }
+                    }
+                },
+
+                {
+                    id: 4, isCustom: true, isLocked: false,
+                    customElements: {
+                        myImage1: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myImage2: {
+                            style: {
+                                transform: 'rotate(52deg)',
+                                filter: 'blur(4px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(150deg)',
+                                width: '100%',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            imgSrc: "images/127458.jpg"
+                        },
+                        myText1: {
+                            style: {
+                                fontSize: '4px',
+                                color: 'rgb(39, 235, 73)',
+                                transform: 'rotate(52deg)',
+                                left: '0%',
+                                bottom: '0%'
+                            },
+                            gridItemStyle: {
+                                borderWidth: '3px',
+                                borderColor: 'darkblue',
+                                backgroundColor: 'darkblue'
+                            },
+                            text: "my text"
+                        }
+                    }
+                },
+
             ]
         ];
         return {
