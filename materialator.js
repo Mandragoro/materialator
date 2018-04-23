@@ -1,9 +1,15 @@
-angular.module('app', [])
-    .run(function ($templateCache) {
+var app = angular.module('app', []);
+    app.config(['$compileProvider',function ($compileProvider) {
+        $compileProvider.debugInfoEnabled(false);
+        $compileProvider.commentDirectivesEnabled(false);
+        $compileProvider.cssClassDirectivesEnabled(false);
+    }]);
+    // .run(function ($templateCache) {
+    app.run(['$templateCache',function ($templateCache) {
         $templateCache.put('itemTB.html', "<div id='itemToolBoxIncludeWrapper'><ng-include src=\"'itemToolBox.html'\"></ng-include></div>");
-        // $templateCache.put('template1.html');
-    })
-    .controller('MyController', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
+    }]);
+    // .controller('MyController', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
+    app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDataFactory', 'CurrentStateService', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
         $scope.caca = 5;
 
         var itemsArr = ItemDataFactory.getData();
@@ -294,9 +300,10 @@ angular.module('app', [])
         how many itemss per row?
         itemss*itemSize /18.9
         */
-    })
+    }]);
 
-    .directive('scrollUpBtn', function () {
+    // .directive('scrollUpBtn', function () {
+    app.directive('scrollUpBtn', [function () {
         return {
             restrict: 'E',
             replace: true,
@@ -316,15 +323,16 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('modalCreateTemplate', function (EditModeService) {
+    // .directive('modalCreateTemplate', function (EditModeService) {
+    app.directive('modalCreateTemplate', ['EditModeService',function (EditModeService) {
         return {
             restrict: 'E',
             replace: true,
             scope: false,
             templateUrl: 'modalCreateTemplate.html',
-            controller: 'MyController',
+            // controller: 'MyController',
             link: function (scope, element, attrs) {
                 let dropZoneGrid = {};
                 let dropZoneGridItem = {};
@@ -593,9 +601,10 @@ angular.module('app', [])
                 // })
             }
         }
-    })
+    }]);
 
-    .directive('dragLine', function ($compile, $document, EditModeService) {
+    // .directive('dragLine', function ($compile, $document, EditModeService) {
+    app.directive('dragLine', ['$compile', '$document', 'EditModeService',function ($compile, $document, EditModeService) {
         return {
             restrict: 'A',
             replace: false,
@@ -1065,15 +1074,16 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('myDrag', function ($compile, $document) {
+    // .directive('myDrag', function ($compile, $document) {
+    app.directive('myDrag', ['$compile', '$document',function ($compile, $document) {
         return {
             restrict: 'E',
             replace: true,
             transclude: true,
             scope: false,
-            require: '^^modalCreateTemplate',
+            // require: '^^modalCreateTemplate',
             template: '<div ng-transclude class="draggable-item"></div>',
             link: function (scope, element, attrs, modalCreateTemplateController) {
 
@@ -1086,15 +1096,16 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('myDrop', function (MouseDownService, $document, $compile, EditModeService) {
+    // .directive('myDrop', function (MouseDownService, $document, $compile, EditModeService) {
+    app.directive('myDrop', ['MouseDownService', '$document', '$compile', 'EditModeService',function (MouseDownService, $document, $compile, EditModeService) {
         return {
             restrict: 'E',
             replace: true,
             transclude: true,
             scope: false,
-            require: '^^modalCreateTemplate',
+            // require: '^^modalCreateTemplate',
             template: `<div class="drop-zone-grid-item custom-drop-zone-grid-item"><p ng-transclude class="dummy"></p><div/>`,
             compile: function (tElement, tAttrs){
                 return {
@@ -1202,21 +1213,22 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('myImageToolbox', function ($compile, CurrentStateService) {
+    // .directive('myImageToolbox', function ($compile, CurrentStateService) {
+    app.directive('myImageToolbox', ['$compile', 'CurrentStateService',function ($compile, CurrentStateService) {
         return {
             restrict: 'E',
             replace: false,
             scope: true,
-            require: ['^?item', '^?myImage', 'myImageToolbox'],
-            controller: function(){
-                // let myImageToolboxController = this;
+            require: ['^?item', '^?myImage'],
+            // controller: function(){
+            //     // let myImageToolboxController = this;
                 
-                // myImageToolboxController.$onInit = function(){
-                //     myImageToolboxController.cagadademierda = null;
-                // }
-            },
+            //     // myImageToolboxController.$onInit = function(){
+            //     //     myImageToolboxController.cagadademierda = null;
+            //     // }
+            // },
             templateUrl: 'myImage/myImageToolbox.html',
             compile: function(){
                 return {
@@ -1287,22 +1299,23 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('myImage', function ($compile, $timeout) {
+    // .directive('myImage', function ($compile, $timeout) {
+    app.directive('myImage', ['$compile', '$timeout',function ($compile, $timeout) {
         return {
             restrict: 'E',
             replace: true,
             transclude: true,
             scope: true,
             require: ['^?item','myImage'],
-            controller: function() {
+            controller: [function() {
                 let myImageController = this;
                 
                 myImageController.$onInit = function() {
                     myImageController.callerId = null;
                 }
-            },
+            }],
             templateUrl: 'myImage/myImage.html',
             compile: function(){
                 return{
@@ -1323,9 +1336,9 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('myTextToolbox', function ($compile,EditModeService) {
+    app.directive('myTextToolbox', ['$compile', 'EditModeService',function ($compile,EditModeService) {
         return {
             restrict: 'E',
             replace: false,
@@ -1369,22 +1382,23 @@ angular.module('app', [])
                 })
             }
         }
-    })
+    }])
 
-    .directive('myText', function ($compile, $timeout) {
+    // .directive('myText', function ($compile, $timeout) {
+    app.directive('myText', ['$compile', '$timeout',function ($compile, $timeout) {
         return {
             restrict: 'E',
             replace: true,
             transclude: true,
             scope: false,
             require: ['^?item','myText'],
-            controller: function () {
+            controller: [function () {
                 let myTextController = this;
 
                 myTextController.$onInit = function () {
                     myTextController.callerId = null;
                 }
-            },
+            }],
             templateUrl: 'myText/myText.html',
             link: function (scope, element, attrs, controllers) {
 
@@ -1402,9 +1416,10 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('itemToolbox', function ($compile) {
+    // .directive('itemToolbox', function ($compile) {
+    app.directive('itemToolbox', ['$compile',function ($compile) {
         return {
             restrict: 'A',
             replace: false,
@@ -1499,9 +1514,10 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('itemToolboxHover', function ($timeout) {
+    // .directive('itemToolboxHover', function ($timeout) {
+    app.directive('itemToolboxHover', ['$timeout',function ($timeout) {
         return {
             restrict: 'A',
             scope: false,
@@ -1537,13 +1553,14 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
     /************************************************************************************************************************************************ 
     // <my-input type="number" target-id="img" property="transform" property-value="rotate" label="Rotate" ng-model="test1" min="0" max="360" value="0"></my-input>
     // <my-input type="range" target-id="img" property="filter" filter="blur" label="Blur" ng-model="test2" min="0" max="30" value="0"></my-input>
     ************************************************************************************************************************************************/
-    .directive('myInput', function (ItemDataFactory, ImageReaderFactory, $compile, $timeout, CurrentStateService) {
+    // .directive('myInput', function (ItemDataFactory, ImageReaderFactory, $compile, $timeout, CurrentStateService) {
+    app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '$timeout', 'CurrentStateService',function (ItemDataFactory, ImageReaderFactory, $compile, $timeout, CurrentStateService) {
         return {
             restrict: 'E',
             scope: true,
@@ -1669,12 +1686,14 @@ angular.module('app', [])
                             let pagesCountCheck = angular.element(document.querySelectorAll('.page')).length;
 
                             // Check if targetID's are in the DOM, changing pages removes some nodes
-                            for (let k = 0; k < targetId.length; k++) {
-                                if (columnA[0].contains(targetId[k]) === false) {
-                                    break;
-                                }
-                                else if (columnA[0].contains(targetId[k]) === true && k === targetId.length-1) {
-                                    return;
+                            if (targetId.length === itemsCount.length) {
+                                for (let k = 0; k < targetId.length; k++) {
+                                    if (columnA[0].contains(targetId[k]) === false) {
+                                        break;
+                                    }
+                                    else if (columnA[0].contains(targetId[k]) === true && k === targetId.length - 1) {
+                                        return;
+                                    }
                                 }
                             }
                             // if (pagesCountCheck === pagesCount && itemsCount.length === targetId.length) {
@@ -1951,9 +1970,10 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .directive('item', function ($compile, ItemDataFactory, $templateRequest) {
+    // .directive('item', function ($compile, ItemDataFactory, $templateRequest) {
+    app.directive('item', ['$compile', 'ItemDataFactory', '$templateRequest',function ($compile, ItemDataFactory, $templateRequest) {
         return {
             restrict: 'A',
             transclude: false,
@@ -1965,7 +1985,7 @@ angular.module('app', [])
             controllerAs: 'itemController',
             bindToController: true,
             template: '<template></template>',
-            controller: function () {
+            controller: [function () {
 
                 var itemController = this;
                 itemController.$onInit = onInit;
@@ -1973,7 +1993,7 @@ angular.module('app', [])
                     const itemNumber = itemController.itemNumber;
                     const template = itemController.template;
                 }
-            },
+            }],
             compile: function (telement, tattrs) {
                 return {
                     pre: function (iscope, ielement, iattrs, iitemController) {
@@ -2028,9 +2048,10 @@ angular.module('app', [])
             //     template.replaceWith($compile('<' + itemData.data.template + '></' + itemData.data.template+'>')(scope));
             // }
         }
-    })
+    }]);
 
-    .directive('itemSelect', function ($compile, ItemDataFactory, $templateRequest) {
+    // .directive('itemSelect', function ($compile, ItemDataFactory, $templateRequest) {
+    app.directive('itemSelect', ['$compile', 'ItemDataFactory', '$templateRequest',function ($compile, ItemDataFactory, $templateRequest) {
         return {
             restrict: 'EA',
             scope: false,
@@ -2121,9 +2142,10 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('template1', function ($compile, ItemDataFactory, $timeout, $templateCache) {
+    // .directive('template1', function ($compile, ItemDataFactory, $timeout, $templateCache) {
+    app.directive('template1', ['$compile', 'ItemDataFactory', '$timeout', '$templateCache',function ($compile, ItemDataFactory, $timeout, $templateCache) {
         return {
             restrict: 'AE',
             require: '^item',
@@ -2253,9 +2275,10 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('template1ToolBox', function (ImageReaderFactory, ItemDataFactory) {
+    // .directive('template1ToolBox', function (ImageReaderFactory, ItemDataFactory) {
+    app.directive('template1ToolBox', ['ImageReaderFactory', 'ItemDataFactory',function (ImageReaderFactory, ItemDataFactory) {
         return {
             restrict: 'EA',
             transclude: false,
@@ -2344,9 +2367,10 @@ angular.module('app', [])
                 })
             }
         }
-    })
+    }]);
 
-    .directive('template2', function ($compile, ItemDataFactory, $timeout, $templateCache, ImageReaderFactory) {
+    // .directive('template2', function ($compile, ItemDataFactory, $timeout, $templateCache, ImageReaderFactory) {
+    app.directive('template2', ['$compile', 'ItemDataFactory', '$timeout', '$templateCache', 'ImageReaderFactory',function ($compile, ItemDataFactory, $timeout, $templateCache, ImageReaderFactory) {
         return {
             restrict: 'AE',
             require: '^item',
@@ -2525,9 +2549,10 @@ angular.module('app', [])
 
             }
         }
-    })
+    }]);
 
-    .directive('template2ToolBox', function (ImageReaderFactory, ItemDataFactory, $compile) {
+    // .directive('template2ToolBox', function (ImageReaderFactory, ItemDataFactory, $compile) {
+    app.directive('template2ToolBox', ['ImageReaderFactory', 'ItemDataFactory', '$compile',function (ImageReaderFactory, ItemDataFactory, $compile) {
         return {
             restrict: 'EA',
             transclude: false,
@@ -2822,9 +2847,10 @@ angular.module('app', [])
                 })
             }
         }
-    })
+    }]);
 
-    .factory('ItemDataFactory', function () {
+    // .factory('ItemDataFactory', function () {
+    app.factory('ItemDataFactory', [function () {
         // var itemsArr = [
         //     [
         //         { 
@@ -3151,9 +3177,10 @@ angular.module('app', [])
                 }
             }
         }
-    })
+    }]);
 
-    .factory('MouseDownService', function () {
+    // .factory('MouseDownService', function () {
+    app.factory('MouseDownService', [function () {
         let mousedown = false;
         return {
             up: function(){
@@ -3166,9 +3193,10 @@ angular.module('app', [])
                 return mousedown;
             }
         }
-    })
+    }]);
 
-    .factory('CurrentStateService', function () {
+    // .factory('CurrentStateService', function () {
+    app.factory('CurrentStateService', [function () {
         let pageHasChanges = true;
         let itemStatus = {1: true};
         return {
@@ -3181,9 +3209,10 @@ angular.module('app', [])
                 return itemStatus[itemNumber];
             }
         }
-    })
+    }]);
 
-    .factory('EditModeService', function () { 
+    // .factory('EditModeService', function () { 
+    app.factory('EditModeService', [function () { 
         let editMode = false;
         let element = {};
         let itemsGridArr = [
@@ -3274,10 +3303,11 @@ angular.module('app', [])
                 return gridRows;
             },
         }
-    })
+    }]);
 
 
-    .factory('ImageReaderFactory', function ($q) {
+    // .factory('ImageReaderFactory', function ($q) {
+    app.factory('ImageReaderFactory', ['$q',function ($q) {
         return {
             readFile: function (event, input) {
                 console.log('reading file')
@@ -3417,4 +3447,4 @@ angular.module('app', [])
                 return defer.promise;
             }
         }
-    })
+    }]);
