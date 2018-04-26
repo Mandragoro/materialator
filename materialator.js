@@ -1481,9 +1481,11 @@ app.directive('myText', ['$compile', '$timeout','ItemDataFactory',function ($com
             function loadElementStyle() {
 
                 let textStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].style;
+                let text = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].text;
                 let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].gridItemStyle;
-
+                
                 angular.element(element[0].firstElementChild).css({ ...textStyle});
+                angular.element(element[0].firstElementChild)[0].firstElementChild.innerText = text;
                 element.parent().css({ ...gridItemStyle});
             }
 
@@ -1844,6 +1846,7 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                             newString = filter + "(" + val + units + ")";
                             for (let i = 0; i < targetId.length; i++) {
                                 targetId[i].style.webkitFilter = currentFilterString + newString;
+                                saveFilterStr(i);
                             }
                             oldString = newString;
                         } 
@@ -1852,11 +1855,17 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                             res = currentFilterString.replace(oldString, newString);
                             for (let i = 0; i < targetId.length; i++) {
                                 targetId[i].style.webkitFilter = res;
+                                saveFilterStr(i);
                             }
                             oldString = newString;
                         }
-                        if (itemController) {
-                            ItemDataFactory.saveItemCss(res, itemArrPosI, itemArrPosJ, 'filter');
+                        function saveFilterStr(i) {
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(res, itemArrPosI, itemArrPosJ, 'filter');
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = res;
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
 
                         // let currentFilterString = targetId[0].style.filter;
@@ -1880,22 +1889,23 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.transform = attrs.propertyValue + '(' + val + units + ')';
                             let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
-                            console.log(gridItem);
-                            // console.log('attrs.targetId', attrs.targetId);
-                            if (itemController) {
+                            // if (itemController) {
                                 // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                                 let valString = attrs.propertyValue + '(' + val + units + ')';
                                 ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
-                            }
+                            // }
                         }
                     }
 
                     function left(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.left = val + '%';
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val + '%';
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].style.left = val + '%';
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1903,9 +1913,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function bottom(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.bottom = val + '%';
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val + '%';
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].style.bottom = val + '%';
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1913,9 +1926,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function width(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.width = val + '%';
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val + '%';
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].style.width = val + '%';
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1923,9 +1939,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function fontSize(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.fontSize = val + 'px';
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val + 'px';
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].style.fontSize = val + 'px';
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1933,9 +1952,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function fontColor(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].style.color = val;
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val;
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].style.color = val;
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1943,9 +1965,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function backgroundColor(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             angular.element(targetId[i]).parent().parent()[0].style.backgroundColor = val;
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val;
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem,true);
+                            // }
                         }
                         // targetId.parent().parent()[0].style.backgroundColor = val;
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1953,9 +1978,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function borderColor(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             angular.element(targetId[i]).parent().parent()[0].style.borderColor = val;
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val;
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem,true);
+                            // }
                         }
                         // targetId.parent().parent()[0].style.borderColor = val;
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1963,9 +1991,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function borderWidth(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             angular.element(targetId[i]).parent().parent()[0].style.borderWidth = val + 'px';
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val + 'px';
+                                ItemDataFactory.saveItemStyle(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem,true);
+                            // }
                         }
                         // targetId.parent().parent()[0].style.borderWidth = val+'px';
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
@@ -1973,9 +2004,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                     function innerText(val) {
                         for (let i = 0; i < targetId.length; i++) {
                             targetId[i].innerText = val;
-                            if (itemController) {
-                                ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
-                            }
+                            // if (itemController) {
+                                // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
+                                let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                let valString = val;
+                                ItemDataFactory.saveItemText(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                            // }
                         }
                         // targetId[0].innerText = val;
                         // targetId.parent().parent()[0].style.borderWidth = val+'px';
@@ -1993,8 +2027,13 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                                     ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'isLocked');
 
                                     ImageReaderFactory.readFile(event, true).then(function (data) {
-                                        ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
-                                        ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
+                                        // ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
+                                        // ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
+
+                                        let gridItem = attrs.targetId + targetId[0].id.match(/\d+$/)[0];
+                                        let valString = data.blob;
+                                        ItemDataFactory.saveItemImgSrc(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+
                                         scope.fileName = data.name;
                                         
                                         targetId[0].src = data.blob;
@@ -2133,7 +2172,7 @@ app.directive('itemSelect', ['$compile', 'ItemDataFactory', '$templateRequest',f
             let itemNumber = itemController.itemNumber;
             let template = itemController.template;
 
-            let overlay = $compile('<div class="overlay"><div class="text">Item ' + itemNumber + '</div></div>')(scope);
+            let overlay = $compile('<div class="overlay dont-print-me"><div class="text">Item ' + itemNumber + '</div></div>')(scope);
             element.append(overlay);
 
             // console.log(angular.element(document.querySelector('#itemToolboxCAGADA')))
@@ -2975,7 +3014,7 @@ app.factory('ItemDataFactory', [function () {
     //     ]
     // ];
 
-    var itemsArr = [
+    let itemsArr = [
         [
             {
                 id: 1, isCustom: true, isLocked: false,
@@ -2991,7 +3030,9 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
@@ -3006,7 +3047,9 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
@@ -3021,7 +3064,9 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'royalblue'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         text: "my text"
                     }
@@ -3042,7 +3087,9 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
@@ -3057,22 +3104,26 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
                     text3: {
                         style: {
                             fontSize: '70px',
-                            color: 'rgb(39, 235, 73)',
+                            color: 'salmon',
                             transform: 'rotate(0deg)',
                             left: '0%',
                             bottom: '0%'
                         },
                         gridItemStyle: {
                             borderWidth: '3px',
-                            borderColor: 'royalblue',
-                            backgroundColor: 'royalblue'
+                            borderColor: 'salmon',
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         text: "my text"
                     }
@@ -3093,7 +3144,9 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
@@ -3108,22 +3161,26 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
                     text3: {
                         style: {
                             fontSize: '70px',
-                            color: 'rgb(39, 235, 73)',
+                            color: 'salmon',
                             transform: 'rotate(0deg)',
                             left: '0%',
                             bottom: '0%'
                         },
                         gridItemStyle: {
                             borderWidth: '3px',
-                            borderColor: 'royalblue',
-                            backgroundColor: 'royalblue'
+                            borderColor: 'salmon',
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box',
+                            margin: '-1px'
                         },
                         text: "my text"
                     }
@@ -3144,7 +3201,8 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
@@ -3159,22 +3217,24 @@ app.factory('ItemDataFactory', [function () {
                         gridItemStyle: {
                             borderWidth: '3px',
                             borderColor: 'salmon',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box'
                         },
                         imgSrc: "images/img_placeholder3.svg"
                     },
                     text3: {
                         style: {
                             fontSize: '70px',
-                            color: 'rgb(39, 235, 73)',
+                            color: 'salmon',
                             transform: 'rotate(0deg)',
                             left: '0%',
                             bottom: '0%'
                         },
                         gridItemStyle: {
                             borderWidth: '3px',
-                            borderColor: 'royalblue',
-                            backgroundColor: 'royalblue'
+                            borderColor: 'salmon',
+                            backgroundColor: 'transparent',
+                            backgroundClip: 'padding-box'
                         },
                         text: "my text"
                     }
@@ -3220,9 +3280,46 @@ app.factory('ItemDataFactory', [function () {
             if (val !== null) itemsArr[i][j].css[path] = val;
             console.log(itemsArr)
         },
-        saveItemStyle: function (val, i, j, property, propertyValue, gridItem) {
+        saveItemStyle: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
+            console.log('saveItemStyle');
+            if (i !== null && j !== null) {
+                if (val !== null && !isGrandpa) {
+                    itemsArr[i][j].customElements[gridItem].style[property] = val;
+                }
+                else {
+                    itemsArr[i][j].customElements[gridItem].gridItemStyle[property] = val;
+                }
+            }
+            else {
+                console.log('mierdaaaaaaaaa',i,j)
+                if (val !== null && !isGrandpa) {
+                    // itemsArr[i][j].customElements[gridItem].style[property] = val;
+                    for (let i = 0; i < itemsArr.length; i++) {
+                        for (let j = 0; j < itemsArr[i].length; j++) {
+                            itemsArr[i][j].customElements[gridItem].style[property] = val;
+                        }
+                    }
+                }
+                else {
+                    // itemsArr[i][j].customElements[gridItem].gridItemStyle[property] = val;
+                    for (let i = 0; i < itemsArr.length; i++) {
+                        for (let j = 0; j < itemsArr[i].length; j++) {
+                            itemsArr[i][j].customElements[gridItem].gridItemStyle[property] = val;
+                        }
+                    }
+                }
+
+            }
+            console.log(itemsArr);
+        },
+        saveItemText: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
             console.log(val, i, j, property, propertyValue, gridItem)
-            if (val !== null) itemsArr[i][j].customElements[gridItem].style[property] = val;
+            if (val !== null && !isGrandpa) itemsArr[i][j].customElements[gridItem].text = val;
+            console.log(itemsArr)
+        },
+        saveItemImgSrc: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
+            console.log(i, j, property, propertyValue, gridItem)
+            if (val !== null && !isGrandpa) itemsArr[i][j].customElements[gridItem].imgSrc = val;
             console.log(itemsArr)
         },
         saveImgSrc: function (val, i, j, gridItem) {

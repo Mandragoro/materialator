@@ -1,7 +1,7 @@
 :root {
     --column-left-width: 17%;
-    --column-left-min-width: 360px;
-    --column-left-max-width: 360px;
+    --column-left-min-width: 280px;
+    --column-left-max-width: 280px;
     /* --iner-shadow: inset 0px 15px 8px -10px #333333, inset 0px -15px 8px -10px #333333; */
     --iner-shadow: inset 0px 20px 20px -20px #000000, inset 0px -20px 20px -20px black;
     /* --html-color: lightslategrey; */
@@ -453,21 +453,26 @@ input[type="color"]{
 .column-a{
     display: block;
     width: 50%;
+    min-width: 22cm;
     float: left;
     padding: 15px;
-    /* background-color: teal; */
+    background-color: teal;
 }
 .column-b{
     display: block;
-    width: 17%;
+    width: 15%;
+    width: var(--column-left-width);
+    min-width: var(--column-left-min-width);
+    max-width: var(--column-left-max-width);
     height: 100%;
+    height: 500px;
     float: left;
     /* max-height: 80%; */
-    position: fixed;
-    right: 18%;
+    /* position: fixed; */
+    /* right: 18%; */
     /* top: 10%; */
     /* overflow-y: auto; */
-    /* background-color: rgb(54, 146, 207); */
+    background-color: rgb(54, 146, 207);
 }
 #itemToolBoxIncludeWrapper{
     /* box-shadow: 0 0 0.5cm rgba(0,0,0,0.5); */
@@ -652,6 +657,7 @@ input[type="color"]{
     grid-row-gap: var(--row-gap);
     /* grid-column-gap: 1em; */
     justify-content: space-evenly;
+    /* justify-content: space-between; */
     max-width: 20cm;
     max-height: 28.7cm;
     /* overflow: hidden; */
@@ -673,7 +679,7 @@ input[type="color"]{
     border-style: solid;
     border-color: var(--border-color);
     border-width: var(--border-width);
-    border-radius: 3px;
+    border-radius: 0px;
     padding: 0px;
     overflow: hidden;
     position: relative;
@@ -1080,6 +1086,10 @@ input[type="color"]{
     margin: 0;
 }
 @media print {
+    * {
+    -webkit-transition: none !important;
+    transition: none !important;
+  }
     html{
         background: #fff !important;
         margin: 0px;
