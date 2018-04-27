@@ -1282,6 +1282,14 @@ app.directive('myImageToolbox', ['$compile', 'CurrentStateService',function ($co
         templateUrl: 'myImage/myImageToolbox.html',
         compile: function(){
             return {
+                pre: function (scope, element, attrs, controllers) {
+
+                    scope.$on('dropDownClick', function (event, data) {
+                        // console.log('hello brodcast in myImageToolbox', data);
+                        scope.showForm1 = false;
+                    })
+
+                },
                 post: function (scope, element, attrs, controllers) {
                     // console.log('post myImageToolbox')
                     const itemController = controllers[0];
@@ -1369,6 +1377,15 @@ app.directive('myImage', ['$compile', '$timeout', 'ItemDataFactory', function ($
         templateUrl: 'myImage/myImage.html',
         compile: function() {
             return {
+                pre: function (scope, element, attrs, controllers) {
+
+                    scope.expand = function () {
+                        console.log('expand!')
+                        scope.$emit('dropDownClick', '💩');
+                        scope.$parent.$broadcast('dropDownClick', '💩');
+                    }
+
+                },
                 post: function (scope, element, attrs, controllers) {
 
                     const itemController = controllers[0];
@@ -1407,41 +1424,53 @@ app.directive('myTextToolbox', ['$compile', 'EditModeService',function ($compile
         scope: true,
         require: ['^?item', '^?myText'],
         templateUrl: 'myText/myTextToolbox.html',
-        link: function (scope, element, attrs, controllers) {
+        compile: function() {
+            return {
+                pre: function (scope, element, attrs, controllers) {
 
-            const itemController = controllers[0];
-            const myTextController = controllers[1];
+                    scope.$on('dropDownClick', function (event, data) {
+                        // console.log('hello brodcast in myTextToolbox', data);
+                        scope.showForm1 = false;
+                    })
 
-            if (itemController && EditModeService.status()===false) {
+                },
+                post: function (scope, element, attrs, controllers) {
 
-                // console.log(EditModeService.status())
-                const itemToolboxCard = angular.element(document.querySelector('#itemToolboxCard' + itemController.itemNumber));
-                itemToolboxCard.append(element);
+                    const itemController = controllers[0];
+                    const myTextController = controllers[1];
 
-                if (parseInt(itemController.itemNumber) === 1) {
-                    
-                    const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
-                    const copy = angular.copy(element);
+                    if (itemController && EditModeService.status() === false) {
 
-                    let compiledCopy = $compile(copy)(scope);
+                        // console.log(EditModeService.status())
+                        const itemToolboxCard = angular.element(document.querySelector('#itemToolboxCard' + itemController.itemNumber));
+                        itemToolboxCard.append(element);
 
-                    angular.element(function () {
-                        let toolboxFormWrapper = angular.element(compiledCopy[0].querySelector('.toolbox-form-wrapper'));
-                        toolboxFormWrapper.attr('target-id', myTextController.callerId);
-                        toolboxClone.append(compiledCopy);
+                        if (parseInt(itemController.itemNumber) === 1) {
+
+                            const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
+                            const copy = angular.copy(element);
+
+                            let compiledCopy = $compile(copy)(scope);
+
+                            angular.element(function () {
+                                let toolboxFormWrapper = angular.element(compiledCopy[0].querySelector('.toolbox-form-wrapper'));
+                                toolboxFormWrapper.attr('target-id', myTextController.callerId);
+                                toolboxClone.append(compiledCopy);
+                            })
+                        }
+                    }
+                    else {
+                        // element.remove();
+                    }
+
+                    scope.$on('$destroy', function () {
+                        console.log('myTextToolbox scope destroyed');
+                    })
+                    element.on('$destroy', function () {
+                        console.log('myTextToolbox element destroyed');
                     })
                 }
             }
-            else {
-                // element.remove();
-            }
-
-            scope.$on('$destroy', function () {
-                console.log('myTextToolbox scope destroyed');
-            })
-            element.on('$destroy', function () {
-                console.log('myTextToolbox element destroyed');
-            })
         }
     }
 }])
@@ -1462,33 +1491,46 @@ app.directive('myText', ['$compile', '$timeout','ItemDataFactory',function ($com
             }
         }],
         templateUrl: 'myText/myText.html',
-        link: function (scope, element, attrs, controllers) {
+        compile: function() {
+            return {
+                pre: function (scope, element, attrs, controllers) {
 
-            const itemController = controllers[0];
-            const myTextController = controllers[1];
+                    scope.expand = function () {
+                        console.log('expand!')
+                        scope.$emit('dropDownClick', '💩');
+                        scope.$parent.$broadcast('dropDownClick', '💩');
+                    }
 
-            const text = angular.element(element[0].querySelector('#text'));
-            if (isNaN(parseInt(text.parent().parent().attr('item-number')))) {
-                text[0].id = 'text' + itemController.itemNumber;
-                console.log('cagada')
+                },
+                post: function (scope, element, attrs, controllers) {
+
+                    const itemController = controllers[0];
+                    const myTextController = controllers[1];
+
+                    const text = angular.element(element[0].querySelector('#text'));
+                    if (isNaN(parseInt(text.parent().parent().attr('item-number')))) {
+                        text[0].id = 'text' + itemController.itemNumber;
+                        console.log('cagada')
+                    }
+                    else {
+                        text[0].id = 'text' + itemController.itemNumber + 'grid' + text.parent().parent().attr('item-number');
+                        myTextController.callerId = text.parent().parent().attr('item-number');
+                        loadElementStyle();
+                    }
+
+                    function loadElementStyle() {
+
+                        let textStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].style;
+                        let text = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].text;
+                        let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].gridItemStyle;
+
+                        angular.element(element[0].firstElementChild).css({ ...textStyle });
+                        angular.element(element[0].firstElementChild)[0].firstElementChild.innerText = text;
+                        element.parent().css({ ...gridItemStyle });
+                    }
+
+                }
             }
-            else {
-                text[0].id = 'text' + itemController.itemNumber + 'grid' + text.parent().parent().attr('item-number');
-                myTextController.callerId = text.parent().parent().attr('item-number');
-                loadElementStyle();
-            }
-
-            function loadElementStyle() {
-
-                let textStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].style;
-                let text = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].text;
-                let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].gridItemStyle;
-                
-                angular.element(element[0].firstElementChild).css({ ...textStyle});
-                angular.element(element[0].firstElementChild)[0].firstElementChild.innerText = text;
-                element.parent().css({ ...gridItemStyle});
-            }
-
         }
     }
 }]);
@@ -1582,6 +1624,11 @@ app.directive('itemToolbox', ['$compile',function ($compile) {
                         const item = angular.element(document.querySelector('#item' + iitemController.itemNumber));
                         item.css({borderColor: val})
                     }
+
+                    iscope.$on('dropDownClick', function (event, data) {
+                        // console.log('hello brodcast in itemToolbox', data);
+                        iscope.showForm1 = false;
+                    })
                 },
                 post: function (scope, element, attrs, itemController) {
 
