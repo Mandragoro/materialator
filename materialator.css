@@ -447,6 +447,9 @@ body{
     width: 39%;
     float: left;
 }
+.column-tools .custom-select{
+    width: 100%;
+}
 .file-name{
     max-width: 100%;
 }
@@ -461,10 +464,11 @@ input[type="color"]{
 .column-a{
     display: block;
     width: 50%;
-    min-width: 22cm;
+    /* min-width: 22cm; */
+    min-width: 60%;
     float: left;
     padding: 15px;
-    background-color: teal;
+    /* background-color: teal; */
 }
 .column-b{
     display: block;
@@ -480,7 +484,7 @@ input[type="color"]{
     /* right: 18%; */
     /* top: 10%; */
     /* overflow-y: auto; */
-    background-color: rgb(54, 146, 207);
+    /* background-color: rgb(54, 146, 207); */
 }
 #itemToolBoxIncludeWrapper{
     /* box-shadow: 0 0 0.5cm rgba(0,0,0,0.5); */
@@ -1009,7 +1013,7 @@ input[type="color"]{
 
 #modalCreateTemplate .modal-content {
     width: 80%;
-    height: 80%;
+    height: 100%;
 }
 #modalCreateTemplate .columns-grid-wrapper {
     height: 100%;
@@ -1090,6 +1094,75 @@ input[type="color"]{
     align-content: center;
     justify-content: center;
     align-items: center;
+}
+
+/* @media screen and (max-width: 1666px) {
+    .column-a {
+        transform: scale(0.8);
+        width: 44%;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+} */
+/* @media screen and (max-width: 1515px) {
+    .column-a {
+        transform: scale(0.5);
+        width: 33%;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+} */
+@media screen and (max-width: 1417px) {
+    .column-a {
+        transform: scale(0.8);
+        width: 54%;
+        min-width: unset;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+}
+@media screen and (max-width: 1245px) {
+    .column-a {
+        transform: scale(0.7);
+        width: 51%;
+        min-width: unset;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+}
+@media screen and (max-width: 1162px) {
+    .column-a {
+        transform: scale(0.6);
+        width: 47%;
+        min-width: unset;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+}
+@media screen and (max-width: 1072px) {
+    .column-a {
+        transform: scale(0.5);
+        width: 43%;
+        min-width: unset;
+        height: 80vh;
+        transform-origin: top left;
+        transform-style: flat;
+    }
+}
+@media screen and (max-width: 1023px){
+   .navbar-menu {
+        background-color: unset;
+   }
+}
+@media screen and (max-width: 945px){
+   #modalCreateTemplate .modal-content {
+        width: 100%;
+   }
 }
 
 @page {

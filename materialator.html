@@ -18,6 +18,7 @@
 
     <section>
       <nav class="navbar is-fixed-top is-primary dont-print-me" role="navigation" aria-label="main navigation">
+
         <div class="navbar-brand">
           <span class="navbar-item">
             <p class="title" id="logo">
@@ -25,41 +26,68 @@
             </p>
           </span>
 
-          <div class="navbar-burger">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+          <a role="button" class="navbar-burger" ng-class="{'is-active': burger}" aria-label="menu" aria-expanded="false"
+           ng-init="burger=false;" ng-click="burger=!burger">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
         </div>
-        <div class="navbar-menu">
-          <div class="navbar-start">
+        
+        <div class="navbar-menu" ng-class="{'is-active': burger}">
+
+          <!-- <div class="navbar-start">
             <a class="navbar-item">
-              <!-- Start -->
+              Start
             </a>
-          </div>
+            <a class="navbar-item">
+              Start
+            </a>
+          </div> -->
           
           <div class="navbar-end">
             <div class="navbar-item">
-              <div class="field is-grouped">
+
+              <div class="field is-grouped is-grouped-multiline">
                 <p class="control">
                   <button class="button is-dark" ng-click="createTemplate()">
-                    <span class="icon is-small">
+                    <span class="icon is-small" style="color:#00d1b2;">
                       <i class="fas fa-edit"></i>
                     </span>
                     <span>Create template</span>
                   </button>
                 </p>
                 <p class="control">
-                  <button class="button is-dark" ng-click="changeTemplate()">
-                    <span class="icon is-small">
+                  <button class="button is-dark" ng-click="changeTemplate()" type="file" id="changeTemplate">
+                    <span class="icon is-small" style="color:#00d1b2;">
                       <i class="fas fa-edit"></i>
                     </span>
                     <span>Change template</span>
                   </button>
                 </p>
+
+                <p class="control">
+                  <div class="field">
+                    <div class="file is-dark">
+                      <label class="file-label">
+                        <input class="file-input" type="file" name="resume">
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label">
+                            Primary file…
+                          </span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </p>
+                
                 <p class="control">
                   <button class="button is-dark" ng-click="print()">
-                    <span class="icon is-small">
+                    <span class="icon is-small" style="color:#00d1b2;">
                       <i class="fas fa-print"></i>
                     </span>
                     <span>Print</span>
@@ -67,10 +95,9 @@
                 </p>
               </div>
 
-              
-              
             </div>
           </div>
+
         </div>
       </nav>
     </section>

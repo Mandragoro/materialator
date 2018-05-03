@@ -22,9 +22,32 @@
     <div class="toolbox-form-wrapper-content" style="overflow: auto;max-height: 400px !important;" ng-show="showForm1">
 
         <div class="field">
+            <div class="pre-icon">
+                <span class="icon">
+                    <i class="fab fa-mix"></i>
+                </span>
+            </div>
+            <div class="input-label">
+                <label class="label">Blend Mode</label>
+            </div>
+            <!-- <label class="label">Blend Mode</label> -->
+            <div class="control has-icons-leftNOT custom-select">
+                <div class="select is-dark" style="width: 100%;">
+                    <select ng-model="data.model" ng-change="changeBlend(data.availableOptions[data.model-1].name)" style="width: 100%;">
+                        <option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+                    </select>
+                </div>
+                <!-- <div class="icon is-small is-left has-text-success">
+                    <i class="fab fa-mix"></i>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="field">
             <my-input icon="fas fa-redo" type="range" target-id="img" property="transform" property-value="rotate" label="Rotate" model="test1" min="0" max="360" value="0"></my-input>
         </div>
-        <div class="field">
+
+        <!-- <div class="field">
             <my-input icon="fas fa-flask" type="range" target-id="img" property="filter" filter="blur" label="Blur" model="test2" min="0" max="30" value="0"></my-input>
         </div>
         <div class="field">
@@ -38,7 +61,7 @@
         </div>
         <div class="field">
             <my-input icon="fas fa-flask" type="range" target-id="img" property="filter" filter="hue-rotate" label="Hue-Rotate" model="test6" min="0" max="360" value="0"></my-input>
-        </div>
+        </div> -->
 
         <!-- <div class="field">
             <label class="label">Image style</label>

@@ -134,7 +134,11 @@ app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDat
     var modalSelectTemplate = angular.element(document.querySelector('#modalSelectTemplate'));
 
     $scope.changeTemplate = function () {
-        modalSelectTemplate.addClass('is-active');
+        // modalSelectTemplate.addClass('is-active');
+        let changeTemplate = angular.element(document.querySelector('#changeTemplate'));
+        changeTemplate.on('change', function (event) {
+            console.log('cagada')
+        })
     }
 
     $scope.closeModalbtn = function () {
@@ -272,51 +276,51 @@ app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDat
                 itemsArr[i].push({
                     id: counter, isCustom: true, isLocked: false,
                     customElements: {
-                        img1: {
-                            style: {
-                                transform: 'rotate(0deg)',
-                                filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                                width: '100%',
-                                left: '0%',
-                                bottom: '0%'
-                            },
-                            gridItemStyle: {
-                                borderWidth: '3px',
-                                borderColor: 'salmon',
-                                backgroundColor: 'transparent'
-                            },
-                            imgSrc: "images/127458.jpg"
-                        },
-                        img2: {
-                            style: {
-                                transform: 'rotate(0deg)',
-                                filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                                width: '100%',
-                                left: '0%',
-                                bottom: '0%'
-                            },
-                            gridItemStyle: {
-                                borderWidth: '3px',
-                                borderColor: 'salmon',
-                                backgroundColor: 'transparent'
-                            },
-                            imgSrc: "images/127458.jpg"
-                        },
-                        text3: {
-                            style: {
-                                fontSize: '70px',
-                                color: 'rgb(39, 235, 73)',
-                                transform: 'rotate(0deg)',
-                                left: '0%',
-                                bottom: '0%'
-                            },
-                            gridItemStyle: {
-                                borderWidth: '3px',
-                                borderColor: 'royalblue',
-                                backgroundColor: 'royalblue'
-                            },
-                            text: "my text"
-                        }
+                        // img1: {
+                        //     style: {
+                        //         transform: 'rotate(0deg)',
+                        //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                        //         width: '100%',
+                        //         left: '0%',
+                        //         bottom: '0%'
+                        //     },
+                        //     gridItemStyle: {
+                        //         borderWidth: '3px',
+                        //         borderColor: 'salmon',
+                        //         backgroundColor: 'transparent'
+                        //     },
+                        //     imgSrc: "images/127458.jpg"
+                        // },
+                        // img2: {
+                        //     style: {
+                        //         transform: 'rotate(0deg)',
+                        //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                        //         width: '100%',
+                        //         left: '0%',
+                        //         bottom: '0%'
+                        //     },
+                        //     gridItemStyle: {
+                        //         borderWidth: '3px',
+                        //         borderColor: 'salmon',
+                        //         backgroundColor: 'transparent'
+                        //     },
+                        //     imgSrc: "images/127458.jpg"
+                        // },
+                        // text3: {
+                        //     style: {
+                        //         fontSize: '70px',
+                        //         color: 'rgb(39, 235, 73)',
+                        //         transform: 'rotate(0deg)',
+                        //         left: '0%',
+                        //         bottom: '0%'
+                        //     },
+                        //     gridItemStyle: {
+                        //         borderWidth: '3px',
+                        //         borderColor: 'royalblue',
+                        //         backgroundColor: 'royalblue'
+                        //     },
+                        //     text: "my text"
+                        // }
                     }
                 });
                 itemsLeft--;
@@ -545,8 +549,8 @@ app.directive('modalCreateTemplate', ['EditModeService',function (EditModeServic
                 let dropZoneGridItem = angular.element(customTemplateClone[0].querySelectorAll('.drop-zone-grid-item'));
                 dropZoneGridItem.css({
                     position: 'relative',
-                    backgroundColor: '#454545',
-                    border: 'solid 1px #ff7878',
+                    backgroundColor: '#ffffff',
+                    // border: 'solid 1px #ff7878',
                     display: 'flex',
                     alignContent: 'center',
                     justifyContent: 'center',
@@ -1266,7 +1270,7 @@ app.directive('myDrop', ['MouseDownService', '$document', '$compile', 'EditModeS
 }]);
 
 // .directive('myImageToolbox', function ($compile, CurrentStateService) {
-app.directive('myImageToolbox', ['$compile', 'CurrentStateService',function ($compile, CurrentStateService) {
+app.directive('myImageToolbox', ['$compile', 'CurrentStateService', 'ItemDataFactory', function ($compile, CurrentStateService, ItemDataFactory) {
     return {
         restrict: 'E',
         replace: false,
@@ -1319,30 +1323,57 @@ app.directive('myImageToolbox', ['$compile', 'CurrentStateService',function ($co
 
                         // scope.itemNumber = myImageController.callerId;
 
-                        scope.elementObjectFitSelect = function (val) {
+                        // scope.elementObjectFitSelect = function (val) {
+                        //     let targetId = '#img' + itemController.itemNumber + 'grid' + myImageController.callerId;
+                        //     angular.element(document.querySelector(targetId)).css({ objectFit: val });
+                        // }
+                    }
+                    // else {
+                    //     scope.elementObjectFitSelect = function (val) {
+                    //         console.log(val)
+                    //         // let targetId = [];
+
+                    //         let itemsCount = angular.element(document.querySelectorAll('.item'));
+                    //         let item1 = angular.element(document.querySelectorAll('#item1'));
+                    //         angular.element(function () {
+                    //             let customTargetId = element.children().attr('target-id');
+                    //             console.log(customTargetId);
+                    //             for (let i = 1; i <= itemsCount.length; i++) {
+                    //                 let temp = angular.element(document.querySelectorAll('#img' + i + 'grid' + customTargetId))
+                    //                 if (temp.length > 0) {
+                    //                     // targetId.push(temp[0]);
+                    //                     temp.css({ objectFit: val });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // }
+
+                    if (itemController) {
+                        scope.changeBlend = function (val) {
                             let targetId = '#img' + itemController.itemNumber + 'grid' + myImageController.callerId;
-                            angular.element(document.querySelector(targetId)).css({ objectFit: val });
+                            angular.element(document.querySelector(targetId)).css({ mixBlendMode: val });
+
+                            console.log('img' + myImageController.callerId)
+                            let gridItem = 'img' + myImageController.callerId;
+                            ItemDataFactory.saveItemStyle(val, itemController.itemArrPosI, itemController.itemArrPosJ, 'mixBlendMode', attrs.propertyValue, gridItem);
                         }
                     }
                     else {
-                        scope.elementObjectFitSelect = function (val) {
-                            console.log(val)
-                            // let targetId = [];
-
+                        scope.changeBlend = function (val) {
                             let itemsCount = angular.element(document.querySelectorAll('.item'));
                             let item1 = angular.element(document.querySelectorAll('#item1'));
                             angular.element(function () {
                                 let customTargetId = element.children().attr('target-id');
-                                console.log(customTargetId);
                                 for (let i = 1; i <= itemsCount.length; i++) {
                                     let temp = angular.element(document.querySelectorAll('#img' + i + 'grid' + customTargetId))
                                     if (temp.length > 0) {
-                                        // targetId.push(temp[0]);
-                                        temp.css({ objectFit: val });
+                                        temp.css({ mixBlendMode: val });
                                     }
                                 }
+                                let gridItem = 'img' + customTargetId;
+                                ItemDataFactory.saveItemStyle(val, null, null, 'mixBlendMode', attrs.propertyValue, gridItem);
                             })
-
                         }
                     }
 
@@ -1402,14 +1433,48 @@ app.directive('myImage', ['$compile', '$timeout', 'ItemDataFactory', function ($
                     }
 
                     function loadElementStyle() {
+                        addCustomElementToItemsArr();
                         let imageStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['img' + myImageController.callerId].style;
                         let imageSrc = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['img' + myImageController.callerId].imgSrc;
                         let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['img' + myImageController.callerId].gridItemStyle;
 
                         angular.element(element[0].firstElementChild).css({ ...imageStyle });
                         angular.element(element[0].firstElementChild).attr('src', imageSrc);
-                        element.parent().css({ ...gridItemStyle });
+                        // element.parent().css({ ...gridItemStyle });
+                        element.css({ ...gridItemStyle });
                     }
+
+                    function addCustomElementToItemsArr() {
+                        ItemDataFactory.addCustomElementToItemsArr('image', itemController.itemNumber, 'img' + myImageController.callerId);
+                    }
+
+                    scope.data = {
+                        model: '1',
+                        availableOptions: [
+                            { id: '1', name: 'normal' },
+                            { id: '2', name: 'color' },
+                            { id: '3', name: 'color-burn' },
+                            { id: '4', name: 'color-dodge' },
+                            { id: '5', name: 'multiply' },
+                            { id: '6', name: 'screen' },
+                            { id: '7', name: 'overlay' },
+                            { id: '8', name: 'darken' },
+                            { id: '9', name: 'lighten' },
+                            { id: '10', name: 'hard-light' },
+                            { id: '11', name: 'soft-light' },
+                            { id: '12', name: 'difference' },
+                            { id: '13', name: 'exclusion' },
+                            { id: '14', name: 'hue' },
+                            { id: '15', name: 'saturation' },
+                            { id: '16', name: 'luminosity' },
+                        ]
+                    };
+
+                    // scope.changeBlend = function(val) {
+                    //     console.log(element.parent()[0])
+                    //     let img = angular.element(element[0].querySelector('img'));
+                    //     img.css({ mixBlendMode: val})
+                    // }
 
                 }
             }
@@ -1519,14 +1584,19 @@ app.directive('myText', ['$compile', '$timeout','ItemDataFactory',function ($com
                     }
 
                     function loadElementStyle() {
-
+                        addCustomElementToItemsArr();
                         let textStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].style;
                         let text = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].text;
                         let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['text' + myTextController.callerId].gridItemStyle;
 
                         angular.element(element[0].firstElementChild).css({ ...textStyle });
                         angular.element(element[0].firstElementChild)[0].firstElementChild.innerText = text;
-                        element.parent().css({ ...gridItemStyle });
+                        // element.parent().css({ ...gridItemStyle });
+                        element.css({ ...gridItemStyle });
+                    }
+
+                    function addCustomElementToItemsArr() {
+                        ItemDataFactory.addCustomElementToItemsArr('text' ,itemController.itemNumber, 'text' + myTextController.callerId);
                     }
 
                 }
@@ -1784,7 +1854,7 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                         if (targetId.length === 0 && callerId !== null) {
                             let customItemNumber = 0;
                             for (let i = 0; i < dropZoneGridItems.length; i++) {
-                                if (parseInt(angular.element(dropZoneGridItems[i]).attr('item-number')) === callerId){
+                                if (parseInt(angular.element(dropZoneGridItems[i]).attr('item-number')) === callerId) {
                                     customItemNumber = callerId;
                                 }
                             }
@@ -1792,9 +1862,11 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                             if (!element.parent().parent().parent().attr('target-id')) {
                                 element.parent().parent().parent().attr('target-id', '#' + attrs.targetId + itemNumber + 'grid' + customItemNumber);
                             }
+                            // console.log('targetId  ', targetId)
                         }
                     }
                     else {
+                        // console.log('getCustomTargets')
                         getCustomTargets();
                     }
 
@@ -1817,13 +1889,13 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                         //     return;
                         // }
                         // pagesCount = pagesCountCheck;
-
+                        // console.log('reset targetId')
                         targetId = [];
                         let item1 = angular.element(document.querySelectorAll('#item1'));
                         // let customImagesCount = angular.element(item1[0].querySelectorAll('img'));
                         // let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
 
-                        angular.element(function () {
+                        // angular.element(function () {
                             customTargetId = null;
                             if (attrs.type !== 'file') {
                                 customTargetId = element.parent().parent().parent().attr('target-id');
@@ -1833,14 +1905,15 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                             }
 
                             for (let i = 1; i <= itemsCount.length; i++) {
-                                let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + + i + 'grid' + customTargetId));
+                                let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + i + 'grid' + customTargetId));
                                 if (temp.length > 0) {
                                     targetId.push(temp[0]);
                                 }
                             }
                             // console.log('itemsCount.length', itemsCount.length)
                             // console.log('targetId.length  ', targetId)
-                        })
+                            // console.log('targetId  ', targetId)
+                        // })
                     }
 
                     if (attrs.property === 'filter') {
@@ -2023,8 +2096,10 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                     }
                     function borderColor(val) {
+                        console.log(targetId)
                         for (let i = 0; i < targetId.length; i++) {
-                            angular.element(targetId[i]).parent().parent()[0].style.borderColor = val;
+                            // angular.element(targetId[i]).parent().parent()[0].style.borderColor = val;
+                            angular.element(targetId[i]).parent()[0].style.borderColor = val;
                             // if (itemController) {
                                 // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                                 let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
@@ -2036,8 +2111,10 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                         // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                     }
                     function borderWidth(val) {
+                        console.log(targetId)
                         for (let i = 0; i < targetId.length; i++) {
-                            angular.element(targetId[i]).parent().parent()[0].style.borderWidth = val + 'px';
+                            // angular.element(targetId[i]).parent().parent()[0].style.borderWidth = val + 'px';
+                            angular.element(targetId[i]).parent()[0].style.borderWidth = val + 'px';
                             // if (itemController) {
                                 // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                                 let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
@@ -2103,10 +2180,12 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                                             // ItemDataFactory.saveItem(data.blob, itemArrPosI, itemArrPosJ, 'img');
                                             // ItemDataFactory.saveItem(true, itemArrPosI, itemArrPosJ, 'imgIsLocked');
                                             // scope.fileName = data.name;
-                                            console.log(targetId);
+                                            // console.log(targetId);
                                             for (let i = 0; i < targetId.length; i++) {
                                                 if(data[i] && data.length !== 'undefined') {
                                                     targetId[i].src = data[i].$$state.value.blob;
+                                                    let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
+                                                    ItemDataFactory.saveImgSrc(data[i].$$state.value.blob, itemArrPosI, itemArrPosJ, gridItem,i+1);
                                                 }
                                                 else{
                                                     targetId[i].src = data.blob;
@@ -3066,231 +3145,287 @@ app.factory('ItemDataFactory', [function () {
             {
                 id: 1, isCustom: true, isLocked: false,
                 customElements: {
-                    img1: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    img2: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    text3: {
-                        style: {
-                            fontSize: '70px',
-                            color: 'salmon',
-                            transform: 'rotate(0deg)',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        text: "my text"
-                    }
+                    // img1: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // img2: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // text3: {
+                    //     style: {
+                    //         fontSize: '70px',
+                    //         color: 'salmon',
+                    //         transform: 'rotate(0deg)',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     text: "my text"
+                    // }
                 }
             },
 
             {
                 id: 2, isCustom: true, isLocked: false,
                 customElements: {
-                    img1: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    img2: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    text3: {
-                        style: {
-                            fontSize: '70px',
-                            color: 'salmon',
-                            transform: 'rotate(0deg)',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        text: "my text"
-                    }
+                    // img1: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // img2: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // text3: {
+                    //     style: {
+                    //         fontSize: '70px',
+                    //         color: 'salmon',
+                    //         transform: 'rotate(0deg)',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     text: "my text"
+                    // }
                 }
             },
 
             {
                 id: 3, isCustom: true, isLocked: false,
                 customElements: {
-                    img1: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    img2: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    text3: {
-                        style: {
-                            fontSize: '70px',
-                            color: 'salmon',
-                            transform: 'rotate(0deg)',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box',
-                            margin: '-1px'
-                        },
-                        text: "my text"
-                    }
+                    // img1: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // img2: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // text3: {
+                    //     style: {
+                    //         fontSize: '70px',
+                    //         color: 'salmon',
+                    //         transform: 'rotate(0deg)',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box',
+                    //         margin: '-1px'
+                    //     },
+                    //     text: "my text"
+                    // }
                 }
             },
 
             {
                 id: 4, isCustom: true, isLocked: false,
                 customElements: {
-                    img1: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    img2: {
-                        style: {
-                            transform: 'rotate(0deg)',
-                            filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                            width: '100%',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box'
-                        },
-                        imgSrc: "images/img_placeholder3.svg"
-                    },
-                    text3: {
-                        style: {
-                            fontSize: '70px',
-                            color: 'salmon',
-                            transform: 'rotate(0deg)',
-                            left: '0%',
-                            bottom: '0%'
-                        },
-                        gridItemStyle: {
-                            borderWidth: '3px',
-                            borderColor: 'salmon',
-                            backgroundColor: 'transparent',
-                            backgroundClip: 'padding-box'
-                        },
-                        text: "my text"
-                    }
+                    // img1: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // img2: {
+                    //     style: {
+                    //         transform: 'translateZ(0) rotate(0deg)',
+                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                    //         width: '100%',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box'
+                    //     },
+                    //     imgSrc: "images/img_placeholder3.svg"
+                    // },
+                    // text3: {
+                    //     style: {
+                    //         fontSize: '70px',
+                    //         color: 'salmon',
+                    //         transform: 'rotate(0deg)',
+                    //         left: '0%',
+                    //         bottom: '0%'
+                    //     },
+                    //     gridItemStyle: {
+                    //         borderWidth: '3px',
+                    //         borderColor: 'salmon',
+                    //         backgroundColor: 'transparent',
+                    //         backgroundClip: 'padding-box'
+                    //     },
+                    //     text: "my text"
+                    // }
                 }
             },
 
         ]
     ];
     return {
+        addCustomElementToItemsArr: function (tag ,id, customElement) {
+            for (let i = 0; i < itemsArr.length; i++) {
+                for (let j = 0; j < itemsArr[i].length; j++) {
+                    if (itemsArr[i][j].id === id) {
+                        if (tag === 'text') {
+                            console.log(itemsArr[i][j].customElements[customElement]);
+                            if (!itemsArr[i][j].customElements[customElement]) {
+                                itemsArr[i][j].customElements[customElement] = {
+                                    style: {
+                                        fontSize: '70px',
+                                        color: 'salmon',
+                                        transform: 'rotate(0deg)',
+                                        left: '0%',
+                                        bottom: '0%'
+                                    },
+                                    gridItemStyle: {
+                                        border: '1px solid rgb(255, 120, 120)',
+                                        borderWidth: '3px',
+                                        borderColor: 'salmon',
+                                        backgroundColor: 'transparent',
+                                        backgroundClip: 'padding-box',
+                                        margin: '-1px'
+                                    },
+                                    text: "my text"
+                                }
+                            }
+                        }
+                        else if (tag === 'image') {
+                            if (!itemsArr[i][j].customElements[customElement]) {
+                                itemsArr[i][j].customElements[customElement] = {
+                                    style: {
+                                        transform: 'rotate(0deg)',
+                                        // filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
+                                        mixBlendMode: 'multiply',
+                                        width: '100%',
+                                        left: '0%',
+                                        bottom: '0%',
+                                        // backfaceVisibility: 'hidden'
+                                    },
+                                    gridItemStyle: {
+                                        border: '1px solid rgb(255, 120, 120)',
+                                        borderWidth: '3px',
+                                        borderColor: 'salmon',
+                                        backgroundColor: 'transparent',
+                                        backgroundClip: 'padding-box',
+                                        margin: '-1px'
+                                    },
+                                    imgSrc: "images/img_placeholder3.svg"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(itemsArr)
+        },
         saveData: function (arr) {
             console.log('saveData ')
 
@@ -3361,7 +3496,7 @@ app.factory('ItemDataFactory', [function () {
         },
         saveItemText: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
             console.log(val, i, j, property, propertyValue, gridItem)
-            if (val !== null && !isGrandpa) itemsArr[i][j].customElements[gridItem].text = val;
+            if (val !== null && isGrandpa==='undefined') itemsArr[i][j].customElements[gridItem].text = val;
             console.log(itemsArr)
         },
         saveItemImgSrc: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
@@ -3369,7 +3504,7 @@ app.factory('ItemDataFactory', [function () {
             if (val !== null && !isGrandpa) itemsArr[i][j].customElements[gridItem].imgSrc = val;
             console.log(itemsArr)
         },
-        saveImgSrc: function (val, i, j, gridItem) {
+        saveImgSrc: function (val, i, j, gridItem,id) {
             if (i && j) {
                 console.log(i, j, gridItem)
                 if (val !== null) itemsArr[i][j].customElements[gridItem].imgSrc = val;
@@ -3379,7 +3514,10 @@ app.factory('ItemDataFactory', [function () {
                 for (let i = 0; i < itemsArr.length; i++) {
                     for (let j = 0; j < itemsArr[i].length; j++) {
                         // console.log(     itemsArr[i][j].customElements[gridItem].imgSrc     )
-                        itemsArr[i][j].customElements[gridItem].imgSrc = val;
+                        if (itemsArr[i][j].id === id) {
+                            itemsArr[i][j].customElements[gridItem].imgSrc = val;
+                            return;
+                        }
                     }
                 }
                 console.log(itemsArr)
