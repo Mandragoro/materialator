@@ -4,6 +4,7 @@
     --column-left-max-width: 280px;
     /* --iner-shadow: inset 0px 15px 8px -10px #333333, inset 0px -15px 8px -10px #333333; */
     --iner-shadow: inset 0px 20px 20px -20px #000000, inset 0px -20px 20px -20px black;
+    --iner-shadow-last: inset 0px 20px 20px -20px #000000;
     /* --html-color: lightslategrey; */
     --html-color: #605f69;
     /* --html-color: #253029; */
@@ -20,8 +21,9 @@
     --item-height: 9cm;
     --font-size: 60px;
     --image-wrapper-size: 80%;
-    --border-width: 2px;
-    --border-color: #FF1493;
+    --border-width: 3px;
+    /* --border-color: #FF1493; */
+    --border-color: #db7093;
     --row-gap: 1cm;
     --object-fit: cover;
 
@@ -38,6 +40,10 @@
     --t2FontSize: 60px;
     --t2TextPosX: 0px;
     --t2TextPosY: -95px;
+
+    --font-size-s: 80%;
+    --font-size-m: 85%;
+    --font-size-g: 100%;
 }
 @font-face {
     font-family: myFont;
@@ -220,6 +226,13 @@ body{
     background: #db7093;
     cursor: pointer;
 }
+
+.input{
+    font-size: var(--font-size-s);
+}
+.icon{
+    vertical-align: middle;
+}
 .cols{
     display: block;
     width: 100%;
@@ -276,7 +289,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: start;
-    /* box-shadow: -2px 10px 20px -7px black; */
+    /* box-shadow: 0px 10px 20px -7px black; */
     /* box-shadow: -3px -1px 30px -2px black; */
     z-index: 1;
 }
@@ -284,7 +297,10 @@ body{
     /* color: palevioletred; */
     color: var(--accordion-item-text);
 }
-.accordion-button-shadow.accordion-button::after{
+.accordion-button-shadow{
+    box-shadow: 0px 10px 20px -7px black;
+}
+.accordion-button-selected.accordion-button::after{
     content: "";
     position: absolute;
     top: 100%;
@@ -295,6 +311,7 @@ body{
 }
 .accordion-button-text{
     width: 90%;
+    font-size: var(--font-size-m);
 }
 .accordion-button-title{
     margin-left: 10px;
@@ -303,8 +320,11 @@ body{
     display: block;
     width: 100%;
     height: auto;
+    /* max-height: 65vh; */
+    max-height: 80%;
     float: left;
     overflow: hidden;
+    overflow-y: auto;
     background-color: #454545;
     box-shadow: var(--iner-shadow);
     animation: slide-down .2s linear;
@@ -379,9 +399,9 @@ body{
     background-color: #363636;
     background-color: #363636de;
     background-color: #291873b8;
-    color: aliceblue;
-    color: #db7093;
-    font-weight: bold;
+    color: #f5f5f5;
+    /* color: #db7093; */
+    font-weight: normal;
     z-index: 1;
 }
 .column-tools-title{
@@ -390,7 +410,8 @@ body{
     width: 100%;
     height: 60px;
     float: left;
-    font-size: 20px;
+    /* font-size: 20px; */
+    font-size: var(--font-size-g);
     display: flex;
     align-items: center;
     justify-content: start;
@@ -399,7 +420,7 @@ body{
 .column-tools-content{
     display:block;
     width: 100%;
-    height: auto;
+    height: 80vh;
     float: left;
     /* margin-top: 10px; */
     /* margin-bottom: 10px; */
@@ -439,7 +460,9 @@ body{
     color: mediumaquamarine;
     color: #00d1b2; */
     color: #d9d9d9;
-    width: 61%;
+    /* font-size: 80%; */
+    font-size: var(--font-size-s);
+    /* width: 61%; */
     float: left;
 }
 .column-tools .control{
@@ -494,7 +517,7 @@ input[type="color"]{
     /* min-height: 100%; */
     height: 90%;
     /* right: 10%; */
-    top: 14px;
+    top: 12px;
     /* top: 67px; */
     animation: apear .5s ease-out;
     -webkit-animation: apear .5s ease-out;
@@ -517,15 +540,18 @@ input[type="color"]{
 }
 .item-toolbox .card label{
     color: #d9d9d9;
+    /* font-size: 80%; */
+    font-size: var(--font-size-s);
 }
 .item-toolbox .card-header{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #454545;
+    background-color: #363636;
 }
 .item-toolbox .card-header p{
-    color: white;
+    color: #f5f5f5;
+    font-weight: normal;
 }
 .item-toolbox .delete{
     margin-right: 5%;
@@ -591,6 +617,7 @@ input[type="color"]{
     width: 90%;
     float: left;
     font-weight: bold;
+    font-size: var(--font-size-m);
 }
 .form-wrapper-header-text p{
     margin-left: 10px;
@@ -604,12 +631,15 @@ input[type="color"]{
     display: block;
     float: left;
 }
+.toolbox-form-wrapper-content .pre-icon {
+    color: #beccd9;
+}
 .toolbox-form-wrapper-content{
     animation: slide-down .2s ease-in;
     -webkit-animation: slide-down .2s ease-in;
     -moz-animation: slide-down .2s ease-in;
     /* box-shadow: inset 0px 15px 8px -10px #333333, inset 0px -15px 8px -10px #333333; */
-    box-shadow: var(--iner-shadow);
+    /* box-shadow: var(--iner-shadow); */
     padding-left: 5%;
     padding-right: 5%;
     background-color: #454545;
@@ -621,9 +651,23 @@ input[type="color"]{
     display: block;
     float: left;
     margin-left: 5px;
+    margin-top: 3px;
 }
-#itemToolBoxIncludeWrapper .item-toolbox .card:last-child .toolbox-form-wrapper:last-child .toolbox-form-wrapper-content{
+.grid-options .input-label{
+    margin-top: 0px;
+}
+/* #itemToolBoxIncludeWrapper .item-toolbox .card:last-child .toolbox-form-wrapper:last-child .toolbox-form-wrapper-content{
     box-shadow: inset 0px 20px 20px -20px #000000;
+} */
+.scroll-container-item:not(:last-child) .toolbox-form-wrapper-content {
+    /* width: 200px;
+    background-color: red !important; */
+    box-shadow: var(--iner-shadow);
+}
+.scroll-container-item:last-child .toolbox-form-wrapper-content {
+    /* width: 200px;
+    background-color: red !important; */
+    box-shadow: var(--iner-shadow-last);
 }
 .column-tools .column-tools-content form .accordion-content:last-child .item-toolbox .card .toolbox-form-wrapper:last-child .toolbox-form-wrapper-content{
     box-shadow: inset 0px 20px 20px -20px #000000;
@@ -670,8 +714,9 @@ input[type="color"]{
     /* grid-gap: 3em 3em; */
     /* grid-row-gap: 1em; */
     grid-row-gap: var(--row-gap);
-    /* grid-column-gap: 1em; */
-    justify-content: space-evenly;
+    grid-column-gap: var(--row-gap);
+    /* justify-content: space-evenly; */
+    justify-content: center;
     /* justify-content: space-between; */
     max-width: 20cm;
     max-height: 28.7cm;

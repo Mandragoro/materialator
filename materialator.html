@@ -61,13 +61,13 @@
                 <p class="control">
                   <button class="button is-dark" ng-click="changeTemplate()" type="file" id="changeTemplate">
                     <span class="icon is-small" style="color:#00d1b2;">
-                      <i class="fas fa-edit"></i>
+                      <i class="fas fa-copy"></i>
                     </span>
                     <span>Change template</span>
                   </button>
                 </p>
 
-                <p class="control">
+                <!-- <p class="control">
                   <div class="field">
                     <div class="file is-dark">
                       <label class="file-label">
@@ -83,7 +83,7 @@
                       </label>
                     </div>
                   </div>
-                </p>
+                </p> -->
                 
                 <p class="control">
                   <button class="button is-dark" ng-click="print()">
@@ -120,14 +120,14 @@
 
           <div class="column-tools">
             <div class="column-tools-title">
-              <p>Tools</p>
+              <p>Batch Tools</p>
             </div>
             
             <div class="column-tools-content">
 
-              <form>
+              <!-- <form> -->
 
-                <div class="accordion-button" ng-class="{'accordion-button-shadow': show1}" ng-init="show1=true;" ng-click="show1=!show1;show2=false;show3=false">
+                <div class="accordion-button" ng-class="{'accordion-button-selected': show1}" ng-init="show1=true;" ng-click="show1=!show1;show2=false;show3=false">
                   <span class="icon">
                     <i class="fas fa-th-large"></i>
                   </span>
@@ -136,14 +136,14 @@
                   </div>
                   <div class="accordion-button-icon">
                     <span class="icon" ng-if="!show1">
-                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-chevron-down"></i>
                     </span>
                     <span class="icon" ng-if="show1">
                       <i class="fas fa-minus"></i>
                     </span>
                   </div>
                 </div>
-                <div class="accordion-content general-tools" ng-show="show1">
+                <div class="accordion-content general-tools grid-options" ng-show="show1">
 
                   <div class="field">
                     <div class="pre-icon">
@@ -172,7 +172,7 @@
                       </span>
                     </div>
                     <div class="input-label">
-                      <label class="label">Item width</label>
+                      <label class="label">Item width (cm)</label>
                     </div>
                     <!-- <label class="label">Item width (cm)</label> -->
                     <div class="control">
@@ -197,31 +197,17 @@
                   <div class="field">
                     <div class="pre-icon">
                       <span class="icon">
-                        <i class="fas fa-minus"></i>
+                        <i class="far fa-plus-square"></i>
                       </span>
                     </div>
                     <div class="input-label">
-                      <label class="label">Row gap (cm)</label>
+                      <label class="label">Grid gap (cm)</label>
                     </div>
                     <!-- <label class="label">Row gap (cm)</label> -->
                     <div class="control">
                       <input class="input" type="number" placeholder="" ng-model="rowGap" ng-change="ok()">
                     </div>
                   </div>
-
-                  <!-- <div class="field">
-                    <div class="pre-icon">
-                      <span class="icon">
-                        <i class="fas fa-text-height"></i>
-                      </span>
-                    </div>
-                    <div class="input-label">
-                      <label class="label">Font size (px)</label>
-                    </div>
-                    <div class="control">
-                      <input class="input" type="number" placeholder="" ng-model="fontSize" ng-change="ok()">
-                    </div>
-                  </div> -->
               
                   <div class="field">
                     <div class="pre-icon">
@@ -253,46 +239,7 @@
                     </div>
                   </div>
 
-                  <!-- <div class="field">
-                    <div class="file is-info is-centered">
-                      <label class="file-label">
-                        <input class="file-input" type="file" name="resume" id="masterImageInput">
-                        <span class="file-cta">
-                          <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                          </span>
-                          <span class="file-label">
-                             Choose image
-                          </span>
-                        </span>
-                      </label>
-                    </div>
-                  </div> -->
-
                 </div>
-
-
-                <!-- <div class="accordion-button" ng-class="{'accordion-button-shadow': show2}" ng-init="show2=false;" ng-click="show2=!show2;show1=false;show3=false">
-                  <span class="icon">
-                    <i class="fas fa-object-group"></i>
-                  </span>
-                  <div class="accordion-button-text">
-                    <p class="accordion-button-title">Template 1 Options</p>
-                  </div>
-                  <div class="accordion-button-icon">
-                    <span class="icon" ng-if="!show2">
-                      <i class="fas fa-plus"></i>
-                    </span>
-                    <span class="icon" ng-if="show2">
-                      <i class="fas fa-minus"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="accordion-content" ng-show="show2">
-
-                  <template1-tool-box></template1-tool-box>
-
-                </div> -->
 
                 <!-- <div class="accordion-button" ng-class="{'accordion-button-shadow': show3}" ng-init="show3=false;" ng-click="show3=!show3;show1=false;show2=false;">
                   <span class="icon">
@@ -316,7 +263,7 @@
 
                 </div> -->
 
-                <div class="accordion-button" ng-class="{'accordion-button-shadow': show3}" ng-init="show3=false;" ng-click="show3=!show3;show1=false;show2=false;">
+                <div class="accordion-button" ng-class="{'accordion-button-shadow': show3,'accordion-button-selected': show3}" ng-init="show3=false;" ng-click="show3=!show3;show1=false;show2=false;">
                   <span class="icon">
                     <i class="far fa-object-group"></i>
                   </span>
@@ -325,7 +272,7 @@
                   </div>
                   <div class="accordion-button-icon">
                     <span class="icon" ng-if="!show3">
-                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-chevron-down"></i>
                     </span>
                     <span class="icon" ng-if="show3">
                       <i class="fas fa-minus"></i>
@@ -333,17 +280,15 @@
                   </div>
                 </div>
                 <!-- <div class="accordion-content" style="overflow: auto;max-height: 830px !important;" ng-show="show3" id="toolboxClone"> -->
-                <div class="accordion-content" ng-show="show3" id="toolboxClone">
+                <div class="accordion-content scroll-container" ng-show="show3" id="toolboxClone">
 
                   <!-- <template2-tool-box></template2-tool-box> -->
                   <!-- <my-image-toolbox></my-image-toolbox> -->
 
                 </div>
-            
 
-              </form>
+              <!-- </form> -->
 
-              
             </div>
           </div>
 
@@ -351,22 +296,12 @@
         </div>
 
         <div class="column-a">
-
-          <!-- Page -->
           <div class="page" id="page" ng-repeat="(index,val) in pageArr track by $index" ng-init="outerIndex = $index">
-            <!-- Grid -->
             <div class="grid-wrapper">
-
-              <div item item-select item-toolbox type='template1' html="item.template" template='item.template' ng-if="template==='template1'" item-number="outerIndex * itemsArr[0].length + $index + 1"
-                class="item" id="item{{item.id}}" ng-repeat="item in itemsArr[index] track by item.id">
+              <div item item-select item-toolbox type='template1' html="item.template" template='template' item-number="outerIndex * itemsArr[0].length + $index + 1" class="item" id="item{{item.id}}" ng-repeat="item in itemsArr[index] track by item.id">
               </div>
-
             </div>
-            <!-- End Grid -->
-
           </div>
-          <!-- End Page -->
-
         </div>
 
         <div class="column-b dont-print-me" id="elementTools">
@@ -380,68 +315,9 @@
       </div>
     </section>
 
-    <div class="modal is-activee" id="modalSelectTemplate">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Select Template</p>
-          <button class="delete" aria-label="close" ng-click="closeModalbtn()"></button>
-        </header>
-        <section class="modal-card-body">
-          
-          <div class="modal-grid">
-
-            <!-- Template 1 image & text -->
-            <div class="itemm" ng-class="{'modal-item-selected': template1}" ng-click="template1 = true;template2=false;selectedTemplate('template1');">
-              <div class="imageWrapper">
-                <!-- <img src="https://source.unsplash.com/random" alt=""> -->
-                <img src="images/med_happy-bee.png" alt="">
-              </div>
-              <div class="text-box">
-                <span>Some text...</span>
-              </div>
-            </div>
-            <!-- End Template 1 -->
-            <!-- Template 2 image/image/text -->
-            <div class="itemm" ng-class="{'modal-item-selected': template2}" ng-click="template2 = true;template1=false;selectedTemplate('template2');">
-              <div class="imageWrapper" style="height:100%;">
-                <img src="images/TCF-PolkaDotsPink-01.png" alt="">
-                <div class="boxContainer">
-                  <img src="images/valentine-bee-freebie3_WhimsyClips.png" alt="">
-                  <span>Some text...</span>
-                </div>
-              </div>
-            </div>
-            <!-- End Template 2 -->
-            
-          </div>
-
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" ng-click="okModalbtn()">Ok</button>
-          <button class="button" ng-click="closeModalbtn()">Cancel</button>
-        </footer>
-      </div>
-    </div>
+    <!-- <modal-select-template></modal-select-template> -->
 
     <modal-create-template class="modal-create-template"></modal-create-template>
-
-    <!-- <div class="modal is-activee" id="modalCreateTemplate">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <button class="modal-close is-large"></button>
-        <section>
-          
-          <div class="columns-grid-wrapper">
-            
-            <div class="grid-item">col left</div>
-            <div class="grid-item">col right</div>
-
-          </div>
-
-        </section>
-      </div>
-    </div> -->
 
   </body>
 

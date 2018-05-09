@@ -9,7 +9,7 @@ app.run(['$templateCache',function ($templateCache) {
     $templateCache.put('itemTB.html', "<div id='itemToolBoxIncludeWrapper'><ng-include src=\"'itemToolBox.html'\"></ng-include></div>");
 }]);
 // .controller('MyController', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
-app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDataFactory', 'CurrentStateService', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService) {
+app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDataFactory', 'CurrentStateService','$timeout', function ($scope, $templateCache, $compile, ItemDataFactory, CurrentStateService, $timeout) {
     $scope.caca = 5;
 
     var itemsArr = ItemDataFactory.getData();
@@ -28,10 +28,16 @@ app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDat
     $scope.rowGap = 1;
     $scope.objectFitSelect = 'cover';
 
-    $scope.template = 'template1';
+    $scope.template = 0; // Initial loading template number
 
     $scope.selectedTemplate = function (selectedTemplate) {
+        console.log('selectedTemplate', selectedTemplate)
         $scope.template = selectedTemplate;
+        $scope.itemsArr = [];
+        ItemDataFactory.resetItemsArr();
+        $timeout(function () {
+            $scope.ok();
+        },0,true);
     }
 
     $scope.print = function () {
@@ -131,68 +137,28 @@ app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDat
     // End Modal create template---------------------------------------------------------------
 
     // Modal select template-------------------------------------------------------------------
-    var modalSelectTemplate = angular.element(document.querySelector('#modalSelectTemplate'));
+    let body = angular.element(document.querySelector('body'));
 
     $scope.changeTemplate = function () {
-        // modalSelectTemplate.addClass('is-active');
-        let changeTemplate = angular.element(document.querySelector('#changeTemplate'));
-        changeTemplate.on('change', function (event) {
-            console.log('cagada')
-        })
+        console.log('changeTemplate');
+        let modalSelectTemplate = angular.element(document.querySelector('#modalSelectTemplate'));
+        
+        if (modalSelectTemplate.length === 0) {
+            body.append($compile('<modal-select-template></modal-select-template>')($scope));
+        }
+        else {
+            modalSelectTemplate.addClass('is-active');
+        }
     }
 
     $scope.closeModalbtn = function () {
+        let modalSelectTemplate = angular.element(document.querySelector('#modalSelectTemplate'));
         modalSelectTemplate.removeClass('is-active');
     }
 
     $scope.okModalbtn = function () {
+        let modalSelectTemplate = angular.element(document.querySelector('#modalSelectTemplate'));
         modalSelectTemplate.removeClass('is-active');
-        if ($scope.template === 'template1') {
-            $scope.itemQuantity = 4;
-            $scope.itemSize = 9;
-            $scope.itemWidth = 9;
-            $scope.itemHeight = 9;
-            $scope.fontSize = 60;
-            $scope.divitionSize = 80;
-            $scope.itemsArr = itemsArr;
-            $scope.pageArr = pageArr;
-            $scope.borderWidth = 2;
-            $scope.borderColor = '#FF1493';
-            $scope.rowGap = 1;
-            $scope.objectFitSelect = 'cover';
-            document.documentElement.style.setProperty('--item-size', $scope.itemSize + 'cm');
-            document.documentElement.style.setProperty('--item-width', $scope.itemWidth + 'cm');
-            document.documentElement.style.setProperty('--item-height', $scope.itemHeight + 'cm');
-            document.documentElement.style.setProperty('--font-size', $scope.fontSize + 'px');
-            document.documentElement.style.setProperty('--image-wrapper-size', $scope.divitionSize + '%');
-            document.documentElement.style.setProperty('--border-width', $scope.borderWidth + 'px');
-            document.documentElement.style.setProperty('--border-color', $scope.borderColor);
-            document.documentElement.style.setProperty('--row-gap', $scope.rowGap + 'cm');
-            document.documentElement.style.setProperty('--object-fit', $scope.objectFitSelect);
-        }
-        else if ($scope.template === 'template2') {
-            $scope.itemQuantity = 4;
-            $scope.itemSize = 9;
-            $scope.itemWidth = 9;
-            $scope.itemHeight = 9;
-            $scope.fontSize = 60;
-            $scope.divitionSize = 80;
-            $scope.itemsArr = itemsArr;
-            $scope.pageArr = pageArr;
-            $scope.borderWidth = 2;
-            $scope.borderColor = '#FF1493';
-            $scope.rowGap = 1;
-            $scope.objectFitSelect = 'cover';
-            document.documentElement.style.setProperty('--item-size', $scope.itemSize + 'cm');
-            document.documentElement.style.setProperty('--item-width', $scope.itemWidth + 'cm');
-            document.documentElement.style.setProperty('--item-height', $scope.itemHeight + 'cm');
-            document.documentElement.style.setProperty('--font-size', $scope.fontSize + 'px');
-            document.documentElement.style.setProperty('--image-wrapper-size', $scope.divitionSize + '%');
-            document.documentElement.style.setProperty('--border-width', $scope.borderWidth + 'px');
-            document.documentElement.style.setProperty('--border-color', $scope.borderColor);
-            document.documentElement.style.setProperty('--row-gap', $scope.rowGap + 'cm');
-            document.documentElement.style.setProperty('--object-fit', $scope.objectFitSelect);
-        }
     }
     // End of Modal select template------------------------------------------------------------
 
@@ -275,53 +241,7 @@ app.controller('MyController', ['$scope', '$templateCache', '$compile', 'ItemDat
                 // itemsArr[i].push({ id: counter, isCustom: true, template: '<my-image><my-text></my-text></my-image>', name: "test1", isLocked: false, img: "images/127458.jpg", borderImg: "images/127458.jpg", imgIsLocked: false, css: { elementObjectFitSelect: 'var(--object-fit)', elementDivitionSize: 'var(--image-wrapper-size)', elementFontSize: "var(--font-size)", elementBorderWidth: 'var(--border-width)', elementBorderColor: 'var(--border-color)' } });
                 itemsArr[i].push({
                     id: counter, isCustom: true, isLocked: false,
-                    customElements: {
-                        // img1: {
-                        //     style: {
-                        //         transform: 'rotate(0deg)',
-                        //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                        //         width: '100%',
-                        //         left: '0%',
-                        //         bottom: '0%'
-                        //     },
-                        //     gridItemStyle: {
-                        //         borderWidth: '3px',
-                        //         borderColor: 'salmon',
-                        //         backgroundColor: 'transparent'
-                        //     },
-                        //     imgSrc: "images/127458.jpg"
-                        // },
-                        // img2: {
-                        //     style: {
-                        //         transform: 'rotate(0deg)',
-                        //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                        //         width: '100%',
-                        //         left: '0%',
-                        //         bottom: '0%'
-                        //     },
-                        //     gridItemStyle: {
-                        //         borderWidth: '3px',
-                        //         borderColor: 'salmon',
-                        //         backgroundColor: 'transparent'
-                        //     },
-                        //     imgSrc: "images/127458.jpg"
-                        // },
-                        // text3: {
-                        //     style: {
-                        //         fontSize: '70px',
-                        //         color: 'rgb(39, 235, 73)',
-                        //         transform: 'rotate(0deg)',
-                        //         left: '0%',
-                        //         bottom: '0%'
-                        //     },
-                        //     gridItemStyle: {
-                        //         borderWidth: '3px',
-                        //         borderColor: 'royalblue',
-                        //         backgroundColor: 'royalblue'
-                        //     },
-                        //     text: "my text"
-                        // }
-                    }
+                    customElements: {}
                 });
                 itemsLeft--;
                 counter++;
@@ -507,8 +427,11 @@ app.directive('modalCreateTemplate', ['EditModeService',function (EditModeServic
                 
             }
             
-            scope.reset = function(){
+            scope.reset = function() {
                 console.log('reset')
+                scope.grid = { cols: 2, rows: 2 };
+                scope.changeColRow('grid.cols',2);
+                scope.changeColRow('grid.rows',2);
             }
 
             scope.save = function () {
@@ -1438,7 +1361,12 @@ app.directive('myImage', ['$compile', '$timeout', 'ItemDataFactory', function ($
                         let imageSrc = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['img' + myImageController.callerId].imgSrc;
                         let gridItemStyle = ItemDataFactory.getItem(itemController.itemNumber).data.customElements['img' + myImageController.callerId].gridItemStyle;
 
-                        angular.element(element[0].firstElementChild).css({ ...imageStyle });
+                        if (imageSrc === 'images/img_placeholder3.svg') {
+                            angular.element(element[0].firstElementChild).css({ ...imageStyle, maxHeight: '100%', padding: '20px' });
+                        }
+                        else {
+                            angular.element(element[0].firstElementChild).css({ ...imageStyle });
+                        }
                         angular.element(element[0].firstElementChild).attr('src', imageSrc);
                         // element.parent().css({ ...gridItemStyle });
                         element.css({ ...gridItemStyle });
@@ -1575,7 +1503,6 @@ app.directive('myText', ['$compile', '$timeout','ItemDataFactory',function ($com
                     const text = angular.element(element[0].querySelector('#text'));
                     if (isNaN(parseInt(text.parent().parent().attr('item-number')))) {
                         text[0].id = 'text' + itemController.itemNumber;
-                        console.log('cagada')
                     }
                     else {
                         text[0].id = 'text' + itemController.itemNumber + 'grid' + text.parent().parent().attr('item-number');
@@ -1624,18 +1551,16 @@ app.directive('itemToolbox', ['$compile',function ($compile) {
                                         <i class="fas fa-lock"></i>
                                     </span>
                                     <p class="card-header-title">
-                                        Item {{itemId}} tools 💩
+                                        Item {{itemId}}
                                     </p>
                                     <button class="delete" ng-click="close()"></button>
                                 </header>
 
                                 <div class="scroll-container"  id="itemToolboxCard${iitemController.itemNumber}">
 
-
-
-                                <div class="toolbox-form-wrapper">
+                                <div class="toolbox-form-wrapper scroll-container-item">
                                         <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm1}" ng-init="showForm1=true"
-                                            ng-click="showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+                                            ng-click="expand();showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
                                             <div class="pre-icon">
                                                 <span class="icon">
                                                     <i class="fas fa-square"></i>
@@ -1656,24 +1581,35 @@ app.directive('itemToolbox', ['$compile',function ($compile) {
                                         <div class="toolbox-form-wrapper-content" ng-show="showForm1">
 
                                             <div class="field">
-                                                <label class="label">Border width {{itemData.borderWidth}} (px) </label>
+                                                <div class="pre-icon">
+                                                    <span class="icon">
+                                                        <i class="fas fa-expand"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-label">
+                                                    <label class="label">Border width {{itemData.borderWidth}} (px) </label>
+                                                </div>
                                                 <div class="control">
-                                                    <input class="input sliderr" type="number" ng-value="itemData.borderWidth" ng-model="itemData.borderWidth" ng-change="changeBorderWidth(itemData.borderWidth)">
+                                                    <input class="input sliderr" style="margin-top: 10px;" type="number" ng-value="itemData.borderWidth" ng-model="itemData.borderWidth" ng-change="changeBorderWidth(itemData.borderWidth)">
                                                 </div>
                                             </div>
 
                                             <div class="field">
-                                                <label class="label">Border color</label>
+                                                <div class="pre-icon">
+                                                    <span class="icon">
+                                                        <i class="fas fa-paint-brush"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-label">
+                                                    <label class="label">Border color</label>
+                                                </div>
                                                 <div class="control">
-                                                    <input type="color" id="base" ng-model="itemData.borderColor" ng-change="changeBorderColor(itemData.borderColor)">
+                                                    <input style="margin-top: 10px;" type="color" id="base" ng-model="itemData.borderColor" ng-change="changeBorderColor(itemData.borderColor)">
                                                 </div>
                                             </div>
 
                                         </div>
                                     </div>
-
-
-
 
                                 </div>
                             </div>
@@ -1699,6 +1635,12 @@ app.directive('itemToolbox', ['$compile',function ($compile) {
                         // console.log('hello brodcast in itemToolbox', data);
                         iscope.showForm1 = false;
                     })
+
+                    iscope.expand = function () {
+                        console.log('expand!')
+                        iscope.$emit('dropDownClick', '💩');
+                        iscope.$parent.$broadcast('dropDownClick', '💩');
+                    }
                 },
                 post: function (scope, element, attrs, itemController) {
 
@@ -2132,7 +2074,7 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                                 // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                                 let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
                                 let valString = val;
-                                ItemDataFactory.saveItemText(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem);
+                                ItemDataFactory.saveItemText(valString, itemArrPosI, itemArrPosJ, attrs.property, attrs.propertyValue, gridItem,i+1);
                             // }
                         }
                         // targetId[0].innerText = val;
@@ -2161,6 +2103,7 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                                         scope.fileName = data.name;
                                         
                                         targetId[0].src = data.blob;
+                                        angular.element(targetId[0]).css({ maxHeight: 'unset', padding: 'unset' });
 
                                         // ImageReaderFactory.createCanvas(data.blob, itemNumber).then(function (canvas) {
                                         //     console.log(canvas);
@@ -2184,11 +2127,13 @@ app.directive('myInput', ['ItemDataFactory', 'ImageReaderFactory', '$compile', '
                                             for (let i = 0; i < targetId.length; i++) {
                                                 if(data[i] && data.length !== 'undefined') {
                                                     targetId[i].src = data[i].$$state.value.blob;
+                                                    angular.element(targetId[i]).css({ maxHeight: 'unset', padding: 'unset' });
                                                     let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
                                                     ItemDataFactory.saveImgSrc(data[i].$$state.value.blob, itemArrPosI, itemArrPosJ, gridItem,i+1);
                                                 }
                                                 else{
                                                     targetId[i].src = data.blob;
+                                                    angular.element(targetId[i]).css({ maxHeight: 'unset', padding: 'unset' });
                                                     let gridItem = attrs.targetId + targetId[i].id.match(/\d+$/)[0];
                                                     ItemDataFactory.saveImgSrc(data.blob, itemArrPosI, itemArrPosJ, gridItem);
                                                 }
@@ -2229,6 +2174,7 @@ app.directive('item', ['$compile', 'ItemDataFactory', '$templateRequest',functio
             function onInit() {
                 const itemNumber = itemController.itemNumber;
                 const template = itemController.template;
+                console.log(itemController);
             }
         }],
         compile: function (telement, tattrs) {
@@ -2237,10 +2183,11 @@ app.directive('item', ['$compile', 'ItemDataFactory', '$templateRequest',functio
 
                     let itemData = ItemDataFactory.getItem(iitemController.itemNumber);
                     let template = angular.element(ielement[0].querySelector('template'));
+                    let templateNumber = iitemController.template;
                     
                     if (itemData.data.isCustom && !itemData.data.isTest) {
                         // template.replaceWith($compile(itemData.data.template)(iscope));
-                        $templateRequest("custom-templates/custom_template_test.html").then(function (html) {
+                        $templateRequest("custom-templates/custom_template_test"+templateNumber+".html").then(function (html) {
                             let newTemplate = angular.element(html);
                             // console.log(html)
                             template.replaceWith($compile(newTemplate)(iscope));
@@ -2284,6 +2231,93 @@ app.directive('item', ['$compile', 'ItemDataFactory', '$templateRequest',functio
         //     let template = angular.element(element[0].querySelector('template'));
         //     template.replaceWith($compile('<' + itemData.data.template + '></' + itemData.data.template+'>')(scope));
         // }
+    }
+}]);
+
+app.directive('modalSelectTemplate', ['$compile', 'ItemDataFactory', '$templateRequest',function ($compile, ItemDataFactory, $templateRequest) {
+    return {
+        restrict: 'E',
+        transclude: false,
+        remplace: false,
+        scope: false,
+        templateUrl: 'modalSelectTemplate.html',
+        controller: [function () {
+            let controller = this;
+            controller.$onInit = onInit;
+            function onInit() {
+                const itemNumber = controller.itemNumber;
+                const template = controller.template;
+            }
+        }],
+        compile: function (telement, tattrs) {
+            return {
+                post: function (iscope, ielement, iattrs, iitemController) {
+
+                    let items = [0, 1, 2, 4, 5, 6];
+                    iscope.items = items;
+
+                    let modalSelectTemplate = angular.element(ielement[0].querySelector('#modalSelectTemplate'));
+                    
+                    iscope.closeModalbtn = function() {
+                        modalSelectTemplate.removeClass('is-active');
+                    }
+                    
+                    angular.element(function() {
+
+                        for (let i = 0; i < items.length; i++) {
+                            let modalItem = angular.element(ielement[0].querySelector('#modalItem'+i));
+
+                            $templateRequest("custom-templates/custom_template_test"+i+".html").then(function (html) {
+                                let newTemplate = angular.element(html);
+                                console.log(newTemplate[0]);
+
+                                let myImageArr = angular.element(newTemplate[0].querySelectorAll('my-image'));
+                                let myTextArr = angular.element(newTemplate[0].querySelectorAll('my-text'));
+
+                                let imgString = angular.element('<img src="images/img_placeholder3.svg" id="img2grid1" style="position: absolute; max-width: none; width: 100%; transform: rotate(0deg); mix-blend-mode: multiply; left: 0%; bottom: unset; max-height: 100%; padding: 20%;">');
+                                let textString = angular.element('<p>My Text</p>');
+
+                                for (let i = 0; i < myImageArr.length; i++) {
+                                    angular.element(myImageArr[i]).parent().css({ border: '3px solid #db7093' });
+                                    let imgStringCopy = angular.copy(imgString);
+                                    myImageArr[i].replaceWith(imgStringCopy[0]);
+                                }
+                                for (let i = 0; i < myTextArr.length; i++) {
+                                    angular.element(myTextArr[i]).parent().css({ border: '3px solid #db7093' });
+                                    let textStringCopy = angular.copy(textString);
+                                    myTextArr[i].replaceWith(textStringCopy[0]);
+                                }
+                                modalItem.append(newTemplate);
+
+                                // let compiledElement = $compile(newTemplate)(iscope);
+                                // console.log(compiledElement[0]);
+                                // modalItem.append(compiledElement);
+                                // angular.element(function(){
+                                //     let myImageToolbox = angular.element(compiledElement[0].querySelectorAll('my-image-toolbox'));
+                                //     let myTextToolbox = angular.element(compiledElement[0].querySelectorAll('my-text-toolbox'));
+                                //     myImageToolbox.remove();
+                                //     myTextToolbox.remove();
+                                //     console.log(myImageToolbox)
+                                //     console.log(myTextToolbox)
+                                // })
+                            });
+                        }
+
+                    })
+
+                    iscope.$on('$destroy', function () {
+                        console.log('itemSelect ' + 'itemNumber' + ' scope destroyed');
+                    })
+                    ielement.on('$destroy', function () {
+                        console.log('itemSelect ' + 'itemNumber' + ' element destroyed');
+                    })
+
+                }
+                // ,post: function() {
+                    
+                // }
+            }
+        }
     }
 }]);
 
@@ -3143,244 +3177,46 @@ app.factory('ItemDataFactory', [function () {
     let itemsArr = [
         [
             {
-                id: 1, isCustom: true, isLocked: false,
-                customElements: {
-                    // img1: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // img2: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // text3: {
-                    //     style: {
-                    //         fontSize: '70px',
-                    //         color: 'salmon',
-                    //         transform: 'rotate(0deg)',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     text: "my text"
-                    // }
-                }
+                id: 1, isCustom: true, isLocked: false, customElements: {}
             },
 
             {
-                id: 2, isCustom: true, isLocked: false,
-                customElements: {
-                    // img1: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // img2: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // text3: {
-                    //     style: {
-                    //         fontSize: '70px',
-                    //         color: 'salmon',
-                    //         transform: 'rotate(0deg)',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     text: "my text"
-                    // }
-                }
+                id: 2, isCustom: true, isLocked: false, customElements: {}
             },
 
             {
-                id: 3, isCustom: true, isLocked: false,
-                customElements: {
-                    // img1: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // img2: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // text3: {
-                    //     style: {
-                    //         fontSize: '70px',
-                    //         color: 'salmon',
-                    //         transform: 'rotate(0deg)',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box',
-                    //         margin: '-1px'
-                    //     },
-                    //     text: "my text"
-                    // }
-                }
+                id: 3, isCustom: true, isLocked: false, customElements: {}
             },
 
             {
-                id: 4, isCustom: true, isLocked: false,
-                customElements: {
-                    // img1: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // img2: {
-                    //     style: {
-                    //         transform: 'translateZ(0) rotate(0deg)',
-                    //         filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                    //         width: '100%',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box'
-                    //     },
-                    //     imgSrc: "images/img_placeholder3.svg"
-                    // },
-                    // text3: {
-                    //     style: {
-                    //         fontSize: '70px',
-                    //         color: 'salmon',
-                    //         transform: 'rotate(0deg)',
-                    //         left: '0%',
-                    //         bottom: '0%'
-                    //     },
-                    //     gridItemStyle: {
-                    //         borderWidth: '3px',
-                    //         borderColor: 'salmon',
-                    //         backgroundColor: 'transparent',
-                    //         backgroundClip: 'padding-box'
-                    //     },
-                    //     text: "my text"
-                    // }
-                }
+                id: 4, isCustom: true, isLocked: false, customElements: {}
             },
 
         ]
     ];
     return {
+        resetItemsArr: function() {
+            itemsArr = [
+                [
+                    {id: 1, isCustom: true, isLocked: false, customElements: {}},
+                    {id: 2, isCustom: true, isLocked: false, customElements: {}},
+                    {id: 3, isCustom: true, isLocked: false, customElements: {}},
+                    {id: 4, isCustom: true, isLocked: false, customElements: {}},
+
+                ]
+            ];
+        },
         addCustomElementToItemsArr: function (tag ,id, customElement) {
             for (let i = 0; i < itemsArr.length; i++) {
                 for (let j = 0; j < itemsArr[i].length; j++) {
                     if (itemsArr[i][j].id === id) {
                         if (tag === 'text') {
-                            console.log(itemsArr[i][j].customElements[customElement]);
+                            // console.log(itemsArr[i][j].customElements[customElement]);
                             if (!itemsArr[i][j].customElements[customElement]) {
                                 itemsArr[i][j].customElements[customElement] = {
                                     style: {
                                         fontSize: '70px',
-                                        color: 'salmon',
+                                        color: '#db7093',
                                         transform: 'rotate(0deg)',
                                         left: '0%',
                                         bottom: '0%'
@@ -3388,7 +3224,7 @@ app.factory('ItemDataFactory', [function () {
                                     gridItemStyle: {
                                         border: '1px solid rgb(255, 120, 120)',
                                         borderWidth: '3px',
-                                        borderColor: 'salmon',
+                                        borderColor: '#db7093',
                                         backgroundColor: 'transparent',
                                         backgroundClip: 'padding-box',
                                         margin: '-1px'
@@ -3403,16 +3239,18 @@ app.factory('ItemDataFactory', [function () {
                                     style: {
                                         transform: 'rotate(0deg)',
                                         // filter: 'blur(0px) brightness(100%) contrast(100%) sepia(0%) hue-rotate(0deg)',
-                                        mixBlendMode: 'multiply',
+                                        // mixBlendMode: 'multiply',
+                                        mixBlendMode: 'none',
                                         width: '100%',
                                         left: '0%',
-                                        bottom: '0%',
+                                        // bottom: '0%',
+                                        bottom: 'unset',
                                         // backfaceVisibility: 'hidden'
                                     },
                                     gridItemStyle: {
                                         border: '1px solid rgb(255, 120, 120)',
                                         borderWidth: '3px',
-                                        borderColor: 'salmon',
+                                        borderColor: '#db7093',
                                         backgroundColor: 'transparent',
                                         backgroundClip: 'padding-box',
                                         margin: '-1px'
@@ -3424,7 +3262,7 @@ app.factory('ItemDataFactory', [function () {
                     }
                 }
             }
-            console.log(itemsArr)
+            // console.log(itemsArr)
         },
         saveData: function (arr) {
             console.log('saveData ')
@@ -3494,10 +3332,23 @@ app.factory('ItemDataFactory', [function () {
             }
             console.log(itemsArr);
         },
-        saveItemText: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
-            console.log(val, i, j, property, propertyValue, gridItem)
-            if (val !== null && isGrandpa==='undefined') itemsArr[i][j].customElements[gridItem].text = val;
-            console.log(itemsArr)
+        saveItemText: function (val, i, j, property, propertyValue, gridItem, id) {
+            console.log(val, i, j, property, propertyValue, gridItem, id)
+            if (i && j && val !== null) {
+                itemsArr[i][j].customElements[gridItem].text = val;
+                console.log('saved')
+            }
+            else {
+                for (let i = 0; i < itemsArr.length; i++) {
+                    for (let j = 0; j < itemsArr[i].length; j++) {
+                        if (itemsArr[i][j].id === id) {
+                            itemsArr[i][j].customElements[gridItem].text = val;
+                            console.log(itemsArr)
+                            return;
+                        }
+                    }
+                }
+            }
         },
         saveItemImgSrc: function (val, i, j, property, propertyValue, gridItem, isGrandpa) {
             console.log(i, j, property, propertyValue, gridItem)
@@ -3620,7 +3471,7 @@ app.factory('EditModeService', [function () {
             console.log(element[0]);
             console.log(element[0].innerHTML);
 
-            download("custom_template_test.html", element[0].innerHTML);
+            download("custom_template_test0.html", element[0].innerHTML);
 
             function download(filename, text) {
                 var element = document.createElement('a');

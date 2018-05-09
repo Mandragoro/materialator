@@ -1,0 +1,24 @@
+<div class="modal is-active" id="modalSelectTemplate">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Select Template</p>
+            <button class="delete" aria-label="close" ng-click="closeModalbtn()"></button>
+        </header>
+        <section class="modal-card-body">
+
+            <div class="modal-grid" ng-init="temp.selected=null">
+
+                <div ng-repeat="item in items track by $index" id="modalItem{{$index}}" class="modal-item" style="border: 3px solid #db7093;" ng-class="{'modal-item-selected':  temp.selected === $index}" ng-click="temp.selected = $index; selectedTemplate($index);">
+                
+                </div>
+
+            </div>
+
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" ng-click="okModalbtn()">Ok</button>
+            <button class="button" ng-click="closeModalbtn()">Cancel</button>
+        </footer>
+    </div>
+</div>
