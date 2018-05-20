@@ -1,128 +1,190 @@
 <div class="modal is-activee" id="modalCreateTemplate">
     <div class="modal-background"></div>
     <div class="modal-content">
-        <button class="modal-close is-large" ng-click="closeModalCreateTemplateBtn()"></button>
+        
+        <nav class="navbar is-primary dont-print-me" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <span class="navbar-item">
+                    <p class="title" id="logo">
+                        Materialator >
+                    </p>
+                </span>
+            
+                <a role="button" class="navbar-burger" ng-class="{'is-active': burger}" aria-label="menu" aria-expanded="false" ng-init="burger=false;"
+                    ng-click="burger=!burger">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            
+            </div>
 
-        <section id="modalCreateTemplateDragZone">
+            <div class="navbar-menu" ng-class="{'is-active': burger}">
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                
+                        <div class="field is-grouped is-grouped-multiline">
+                            <p class="control">
+                                <button class="button is-dark is-outlined" ng-click="closeModalCreateTemplateBtn()">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    <span>Return</span>
+                                </button>
+                            </p>
+                            <p class="control">
+                                <button class="button is-dark is-outlinedc" ng-click="save()">
+                                    <span class="icon is-small" style="color:inherit;">
+                                        <i class="fas fa-save"></i>
+                                    </span>
+                                    <span>Save template</span>
+                                </button>
+                            </p>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+        </nav>
 
-            <div class="columns-grid-wrapper">
+        <!-- <button class="modal-close is-large" ng-click="closeModalCreateTemplateBtn()"></button> -->
 
-                <div class="grid-item grid-drop-col">
+        <section class="section" style="padding-bottom: 20px;">
+            <div class="container is-fluid">
+                <div class="content">
+                    <h1 style="color: #fff; text-align: center;font-weight: 900">Custom template</h1>
+                    <p style="color: #fff; text-align: center;font-weight: 400">Drag and drop an element into the grid</p>
+                </div>
+            </div>
+        </section>
 
-                    <div class="drop-zone custom-template" style="position: relative;">
+        <section class="section" id="modalCreateTemplateDragZone">
 
+            <div class="container" style="max-width: 1300px;">
+                
+                <div class="grid-item grid-tools-col" style="display: block;float: left; width: 15%; border: 0px solid salmon; margin-right: 5%; margin-left: 5%; padding: 0%;background-color: #363636;border-radius: 5px;height: 100%; overflow: hidden;box-shadow: 0px 3px 20px 0px #00000029;">
 
+                    <div style="background-color: #cc6055; font-weight: 900; color: #363636;margin-bottom: 0%;text-align: center;padding: 3%;">
+                        <p>Grid tools</p>
+                    </div>
+                    
+                    <div style="padding: 10%;">
+                        <div class="field" style="max-width: 100%;">
+                            <label class="label" style="margin-bottom: 0px; color: #fff; font-weight: 400;">Columns</label>
+                            <div class="control">
+                                <input class="input" type="number" placeholder="" ng-model="grid.cols" ng-change="changeColRow('grid.cols',grid.cols)">
+                            </div>
+                        </div>
+                        
+                        <div class="field" style="max-width: 100%;">
+                            <label class="label" style="margin-bottom: 0px; color: #fff; font-weight: 400;">Rows</label>
+                            <div class="control">
+                                <input class="input" type="number" placeholder="" ng-model="grid.rows" ng-change="changeColRow('grid.rows',grid.rows)">
+                            </div>
+                        </div>
+                        
+                        <div class="field" style="margin-top: 35px">
+                            <div class="control">
+                                <button class="button is-primary is-outlined is-centered" style="width: 100%;" ng-click="reset();dropGrid.selected=false">
+                                    <span class="icon is-small" style="color:inherit;">
+                                        <i class="fas fa-redo"></i>
+                                    </span>
+                                    <span>Reset</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="field" style="margin-top: 0%" ng-if="dropGrid.selected===true">
+                            <div class="control">
+                                <button class="button is-primary is-outlinedd" style="width: 100%;" ng-click="merge()">
+                                    <span class="icon is-small" style="color:inherit;">
+                                        <i class="fas fa-random"></i>
+                                    </span>
+                                    <span>Merge</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                
+                <div class="grid-item grid-drop-col" style="display: block;float: left; width: 50%;box-shadow: 0px 3px 20px 0px #00000029;">
+                
+                    <div class="drop-zone custom-template" style="position: relative; margin: auto;height: 0;padding-top: 100%;">
+                
                         <svg class="svg-grid">
                             <g>
                                 <!-- <text x="87.5%" y="8.333333333333332%" class="svg-text">head</text>
-                                <text x="62.5%" y="41.66666666666667%" class="svg-text">aside</text>
-                                <text x="87.5%" y="25%" class="svg-text">main</text>
-                                <text x="87.5%" y="41.66666666666667%" class="svg-text">main</text>
-                                <text x="87.5%" y="58.333333333333336%" class="svg-text">main</text>
-                                <text x="87.5%" y="75%" class="svg-text">main</text>
-                                <text x="87.5%" y="91.66666666666666%" class="svg-text">foot</text> -->
+                                                <text x="62.5%" y="41.66666666666667%" class="svg-text">aside</text>
+                                                <text x="87.5%" y="25%" class="svg-text">main</text>
+                                                <text x="87.5%" y="41.66666666666667%" class="svg-text">main</text>
+                                                <text x="87.5%" y="58.333333333333336%" class="svg-text">main</text>
+                                                <text x="87.5%" y="75%" class="svg-text">main</text>
+                                                <text x="87.5%" y="91.66666666666666%" class="svg-text">foot</text> -->
                             </g>
                             <g>
-                                <line ng-attr-x1="{{(100/vSvgLines)*($index+1)}}%" ng-attr-x2="{{(100/vSvgLines)*($index+1)}}%" y1="0%" y2="100%"
-                                 ng-repeat="i in vSvgLinesArr(vSvgLines-1) track by $index" class="svg-grid-lines"></line>
+                                <line ng-attr-x1="{{(100/vSvgLines)*($index+1)}}%" ng-attr-x2="{{(100/vSvgLines)*($index+1)}}%" y1="0%" y2="100%" ng-repeat="i in vSvgLinesArr(vSvgLines-1) track by $index"
+                                    class="svg-grid-lines"></line>
                                 <!-- <line x1="25%" y1="0%" x2="25%" y2="100%" class="svg-grid-lines"></line>
-                                <line x1="50%" y1="0%" x2="50%" y2="100%" class="svg-grid-lines"></line>
-                                <line x1="75%" y1="0%" x2="75%" y2="100%" class="svg-grid-lines"></line> -->
+                                                <line x1="50%" y1="0%" x2="50%" y2="100%" class="svg-grid-lines"></line>
+                                                <line x1="75%" y1="0%" x2="75%" y2="100%" class="svg-grid-lines"></line> -->
                             </g>
                             <g>
-                                <line ng-attr-y1="{{(100/hSvgLines)*($index+1)}}%" ng-attr-y2="{{(100/hSvgLines)*($index+1)}}%" x1="0%" x2="100%"
-                                 ng-repeat="i in hSvgLinesArr(hSvgLines-1) track by $index" class="svg-grid-lines"></line>
+                                <line ng-attr-y1="{{(100/hSvgLines)*($index+1)}}%" ng-attr-y2="{{(100/hSvgLines)*($index+1)}}%" x1="0%" x2="100%" ng-repeat="i in hSvgLinesArr(hSvgLines-1) track by $index"
+                                    class="svg-grid-lines"></line>
                                 <!-- <line x1="0%" y1="25%" x2="100%" y2="25%" class="svg-grid-lines"></line>
-                                <line x1="0%" y1="50%" x2="100%" y2="50%" class="svg-grid-lines"></line>
-                                <line x1="0%" y1="75%" x2="100%" y2="75%" class="svg-grid-lines"></line> -->
+                                                <line x1="0%" y1="50%" x2="100%" y2="50%" class="svg-grid-lines"></line>
+                                                <line x1="0%" y1="75%" x2="100%" y2="75%" class="svg-grid-lines"></line> -->
                             </g>
                         </svg>
-
+                
                         <div class="drop-zone-grid">
                             <my-drop ng-repeat="item in itemsGridArr" item-number="{{item.val}}">{{item.val}}</my-drop>
                         </div>
                     </div>
                 </div>
-
-                <div class="grid-item grid-elements-col">
-                    
+                
+                <div class="grid-item grid-elements-col" style="display: block;float: left; width: 15%; border: 0px solid salmon;margin-left: 5%; padding: 0%;background-color: #363636;
+    border-radius: 5px; overflow: hidden; box-shadow: 0px 3px 20px 0px #00000029;">
+                
                     <div class="grid-elements-wrapper">
 
+                        <div style="background-color: #cc6055; font-weight: 900; color: #363636;margin-bottom: 25%;text-align: center;padding: 3%;">
+                            <p>Drag elements</p>
+                        </div>
+                
                         <my-drag draggable="true">
                             <img class="replace-me-my-image" src="images/img_placeholder3.svg">
                         </my-drag>
-                        
+                
                         <my-drag draggable="true">
                             <img class="replace-me-my-text" style="vertical-align: middle;" src="images/text.svg">
                         </my-drag>
-
-                        <!-- <my-drag draggable="true">
-                            <div>💩</div>
-                        </my-drag>
-                        
-                        <my-drag draggable="true">
-                            <div>🐼</div>
-                        </my-drag>
-
-                        <my-drag draggable="true">
-                            <img class="replace-me-my-image" src="images/med_happy-bee.png">
-                        </my-drag>
-
-                        <my-drag draggable="true">
-                            <p class="replace-me-my-text">Text</p>
-                        </my-drag> -->
-                        
+                
                     </div>
-
-                </div>
-
-                <div class="grid-item  grid-tools-col">
-
-                    <div class="field">
-                        <label class="label">Columns</label>
-                        <div class="control">
-                            <input class="input" type="number" placeholder="" ng-model="grid.cols" ng-change="changeColRow('grid.cols',grid.cols)">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Rows</label>
-                        <div class="control">
-                            <input class="input" type="number" placeholder="" ng-model="grid.rows" ng-change="changeColRow('grid.rows',grid.rows)">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Merge</label>
-                        <div class="control">
-                            <button class="button is-dark" ng-click="merge()">Merge</button>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Reset</label>
-                        <div class="control">
-                            <button class="button is-dark" ng-click="reset()">Reset</button>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Save</label>
-                        <div class="control">
-                            <button class="button is-danger" ng-click="save()">
-                                <span class="icon is-small" style="color:inherit;">
-                                    <i class="fas fa-save"></i>
-                                </span>
-                                <span>Save</span>
-                            </button>
-                        </div>
-                    </div>
-
+                
                 </div>
 
             </div>
 
         </section>
+
+        <!-- <section class="section" style="padding-top: 0;">
+            <div class="container" style="max-width: 1150px;">
+                <div class="field">
+                    <div class="control">
+                        <div class="buttons is-right">
+                            <button class="button is-danger" ng-click="save()">
+                                <span class="icon is-small" style="color:inherit;">
+                                    <i class="fas fa-save"></i>
+                                </span>
+                                <span>Save template</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
 
     </div>
 </div>
