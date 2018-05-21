@@ -1744,7 +1744,7 @@
 
                                 <div class="toolbox-form-wrapper scroll-container-item">
                                         <div class="toolbox-form-wrapper-header" ng-class="{'toolbox-form-wrapper-header-selected': showForm1}" ng-init="showForm1=true"
-                                            ng-click="expand();showForm1=!showForm1;showForm2=false;showForm3=false;showForm4=false;showForm5=false;">
+                                            ng-click="showForm1 ? (expand()) : [expand(), showForm1=!showForm1]">
                                             <div class="pre-icon">
                                                 <span class="icon">
                                                     <i class="fas fa-square"></i>
