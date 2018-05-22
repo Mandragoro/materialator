@@ -3392,9 +3392,9 @@
                                             bottom: '0%'
                                         },
                                         gridItemStyle: {
-                                            border: '1px solid rgb(255, 120, 120)',
+                                            border: '1px solid #7b68ee',
                                             borderWidth: '3px',
-                                            borderColor: '#db7093',
+                                            borderColor: '#7b68ee',
                                             backgroundColor: 'transparent',
                                             backgroundClip: 'padding-box',
                                             margin: '-1px'
@@ -3418,9 +3418,9 @@
                                             // backfaceVisibility: 'hidden'
                                         },
                                         gridItemStyle: {
-                                            border: '1px solid rgb(255, 120, 120)',
+                                            border: '1px solid #7b68ee',
                                             borderWidth: '3px',
-                                            borderColor: '#db7093',
+                                            borderColor: '#7b68ee',
                                             backgroundColor: 'transparent',
                                             backgroundClip: 'padding-box',
                                             margin: '-1px'

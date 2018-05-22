@@ -52,19 +52,19 @@
         <section class="section" style="padding-bottom: 20px;">
             <div class="container is-fluid">
                 <div class="content">
-                    <h1 style="color: #fff; text-align: center;font-weight: 900">Custom template</h1>
-                    <p style="color: #fff; text-align: center;font-weight: 400">Drag and drop an element into the grid</p>
+                    <h1 style="color: #d9d9d9; text-align: center;font-weight: 900">Custom template</h1>
+                    <p style="color: #d9d9d9; text-align: center;font-weight: 400">Drag and drop an element into the grid</p>
                 </div>
             </div>
         </section>
 
         <section class="section" id="modalCreateTemplateDragZone">
 
-            <div class="container" style="max-width: 1300px;">
+            <div class="container" style="max-width: 110vh;">
                 
-                <div class="grid-item grid-tools-col" style="display: block;float: left; width: 15%; border: 0px solid salmon; margin-right: 5%; margin-left: 5%; padding: 0%;background-color: #363636;border-radius: 5px;height: 100%; overflow: hidden;box-shadow: 0px 3px 20px 0px #00000029;">
+                <div class="grid-item grid-tools-col">
 
-                    <div style="background-color: #cc6055; font-weight: 900; color: #363636;margin-bottom: 0%;text-align: center;padding: 3%;">
+                    <div class="column-header">
                         <p>Grid tools</p>
                     </div>
                     
@@ -112,44 +112,27 @@
                 
                     <div class="drop-zone custom-template" style="position: relative; margin: auto;height: 0;padding-top: 100%;">
                 
-                        <svg class="svg-grid">
+                        <!-- <svgd class="svg-grid">
                             <g>
-                                <!-- <text x="87.5%" y="8.333333333333332%" class="svg-text">head</text>
-                                                <text x="62.5%" y="41.66666666666667%" class="svg-text">aside</text>
-                                                <text x="87.5%" y="25%" class="svg-text">main</text>
-                                                <text x="87.5%" y="41.66666666666667%" class="svg-text">main</text>
-                                                <text x="87.5%" y="58.333333333333336%" class="svg-text">main</text>
-                                                <text x="87.5%" y="75%" class="svg-text">main</text>
-                                                <text x="87.5%" y="91.66666666666666%" class="svg-text">foot</text> -->
+                                <line ng-attr-x1="{{(100/vSvgLines)*($index+1)}}%" ng-attr-x2="{{(100/vSvgLines)*($index+1)}}%" y1="0%" y2="100%" ng-repeat="i in vSvgLinesArr(vSvgLines-1) track by $index" class="svg-grid-lines"></line>
                             </g>
                             <g>
-                                <line ng-attr-x1="{{(100/vSvgLines)*($index+1)}}%" ng-attr-x2="{{(100/vSvgLines)*($index+1)}}%" y1="0%" y2="100%" ng-repeat="i in vSvgLinesArr(vSvgLines-1) track by $index"
-                                    class="svg-grid-lines"></line>
-                                <!-- <line x1="25%" y1="0%" x2="25%" y2="100%" class="svg-grid-lines"></line>
-                                                <line x1="50%" y1="0%" x2="50%" y2="100%" class="svg-grid-lines"></line>
-                                                <line x1="75%" y1="0%" x2="75%" y2="100%" class="svg-grid-lines"></line> -->
+                                <line ng-attr-y1="{{(100/hSvgLines)*($index+1)}}%" ng-attr-y2="{{(100/hSvgLines)*($index+1)}}%" x1="0%" x2="100%" ng-repeat="i in hSvgLinesArr(hSvgLines-1) track by $index" class="svg-grid-lines"></line>
                             </g>
-                            <g>
-                                <line ng-attr-y1="{{(100/hSvgLines)*($index+1)}}%" ng-attr-y2="{{(100/hSvgLines)*($index+1)}}%" x1="0%" x2="100%" ng-repeat="i in hSvgLinesArr(hSvgLines-1) track by $index"
-                                    class="svg-grid-lines"></line>
-                                <!-- <line x1="0%" y1="25%" x2="100%" y2="25%" class="svg-grid-lines"></line>
-                                                <line x1="0%" y1="50%" x2="100%" y2="50%" class="svg-grid-lines"></line>
-                                                <line x1="0%" y1="75%" x2="100%" y2="75%" class="svg-grid-lines"></line> -->
-                            </g>
-                        </svg>
+                        </svgd> -->
                 
                         <div class="drop-zone-grid">
                             <my-drop ng-repeat="item in itemsGridArr" item-number="{{item.val}}">{{item.val}}</my-drop>
                         </div>
                     </div>
+
                 </div>
                 
-                <div class="grid-item grid-elements-col" style="display: block;float: left; width: 15%; border: 0px solid salmon;margin-left: 5%; padding: 0%;background-color: #363636;
-    border-radius: 5px; overflow: hidden; box-shadow: 0px 3px 20px 0px #00000029;">
+                <div class="grid-item grid-elements-col">
                 
                     <div class="grid-elements-wrapper">
 
-                        <div style="background-color: #cc6055; font-weight: 900; color: #363636;margin-bottom: 25%;text-align: center;padding: 3%;">
+                        <div class="column-header">
                             <p>Drag elements</p>
                         </div>
                 
