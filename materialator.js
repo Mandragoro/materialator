@@ -7,6 +7,13 @@
         $compileProvider.debugInfoEnabled(false);
         $compileProvider.commentDirectivesEnabled(false);
         $compileProvider.cssClassDirectivesEnabled(false);
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) load_script();
+        function load_script() {
+            let s = document.createElement('script'); // use global document since Angular's $document is weak
+            s.src = 'DragDropTouch.js';
+            document.body.appendChild(s);
+        }
     }]);
 
     app.run(['$animate', '$templateCache', '$window', '$timeout', function ($animate, $templateCache, $window, $timeout) {
@@ -430,6 +437,7 @@
                     s = EditModeService.getAreaString();
                     itemsGridArr = EditModeService.getItemsGridArr();
                     selectedItems = EditModeService.getSelectedItems();
+                    console.log(selectedItems)
                     if (selectedItems.length < 2) return;
                     console.log('merge', selectedItems);
                     console.log('itemsGridArr', itemsGridArr);
@@ -1148,12 +1156,121 @@
             template: '<div ng-transclude class="draggable-item"></div>',
             link: function (scope, element, attrs, modalCreateTemplateController) {
 
+                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                // let x = 0;
+                // let y = 0;
+
+                // if (isMobile) {
+                //     // console.log('isMobile', isMobile);
+                //     element.on('touchstart', touchStart);
+                //     // element.on("touchstart", touchHandler);
+                //     // element.on("touchmove", touchHandler);
+                //     // element.on("touchend", touchHandler);
+                //     // element.on("touchcancel", touchHandler);
+
+                //     element.on('mousedown', function (event) {
+                //         console.log('mousedown', event)
+                //         xfirst = element[0].getBoundingClientRect().x;
+                //         yfirst = element[0].getBoundingClientRect().y;
+                //     })
+                //     element.on('mousemove', function (event) {
+                //         console.log('mousemove', event)
+                //         var e = new Event('dragstart');
+                //         e.initEvent('dragstart', true, true);
+                //         e.button = 0;
+                //         e.which = e.buttons = 1;
+                //         e.clientX = event.clientX;
+                //         e.clientY = event.clientY;
+                //         e.dataTransfer = new DataTransfer();
+                //         element[0].dispatchEvent(e);
+                //     })
+                // }
+
                 element.on('dragstart', function (event) {
+                    console.log('dragstart',event)
+                    if(isMobile){
+                        scope.$parent.showTools = false;
+                        angular.element(document.querySelector('#modalCreateTemplateDragZone')).css({ padding: '0'});
+                        angular.element(document.querySelector('.grid-elements-col')).css({ opacity: '0'});
+                        // angular.element(document.querySelector('.grid-tools-col')).addClass('ng-hide');
+                    }
                     // event.dataTransfer.setData("text", event.currentTarget.id);
                     // console.log(event.currentTarget.firstElementChild.nodeName);
                     // scope.dragElement = angular.element(event.currentTarget).children().clone();
                     scope.dragElement = { element: angular.element(event.currentTarget).children().clone(), type: event.currentTarget.firstElementChild.nodeName };
+                    // if (isMobile) touchMove(event);
                 })
+                element.on('dragend', function (event) {
+                    if (isMobile) {
+                        angular.element(document.querySelector('#modalCreateTemplateDragZone')).css({ paddingLeft: '24px', paddingRight: '24px', paddingTop: '10px' });
+                        angular.element(document.querySelector('.grid-elements-col')).css({ opacity: '1' });
+                        // angular.element(document.querySelector('.grid-tools-col')).removeClass('ng-hide');
+                    }
+                })
+
+                function touchHandler(event) {
+                    let touch = event.changedTouches[0];
+                    console.log(touch)
+
+                    let simulatedEvent = document.createEvent("MouseEvent");
+                    simulatedEvent.initMouseEvent({
+                        touchstart: "mousedown",
+                        touchmove: "mousemove",
+                        touchend: "mouseup"
+                    }[event.type], true, true, window, 1,
+                        touch.screenX, touch.screenY,
+                        touch.clientX, touch.clientY, false,
+                        false, false, false, 0, null);
+
+                    touch.target.dispatchEvent(simulatedEvent);
+                    if (event.target.id == 'draggable_item') {
+                        event.preventDefault();
+                    }
+                }
+
+                function touchStart(event) {
+
+                    xfirst = element[0].getBoundingClientRect().x;
+                    yfirst = element[0].getBoundingClientRect().y;
+
+                    scope.dragElement = { element: angular.element(event.currentTarget).children().clone(), type: event.currentTarget.firstElementChild.nodeName };
+                    // console.log(event.currentTarget)
+
+                    element.on('touchmove', touchMove);
+                    element.on('touchend', touchEnd);
+                    element.on('touchcancel', touchEnd);
+                }
+
+                let xfirst = 0;
+                let yfirst = 0;
+
+                function touchMove(event) {
+                    event.preventDefault();
+                    // x = (event.changedTouches[0].clientX - 50).toString() + 'px';
+                    // y = (event.changedTouches[0].clientY - 50).toString() + 'px';
+                    x = (event.changedTouches[0].clientX - xfirst).toString() + 'px';
+                    y = (event.changedTouches[0].clientY - yfirst).toString() + 'px';
+                    // x = (event.clientX - xfirst).toString() + 'px';
+                    // y = (event.clientY - yfirst).toString() + 'px';
+                    // element.css({ position: 'absolute', left: x, top: y, width: '50px' });
+                    element.css({ transform: "translate("+ x +","+ y+")"});
+                    // checkIfCollision(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+
+                }
+
+                function touchEnd(event) {
+                    x,y = 0;
+                    element.off('touchmove', touchMove);
+                    element.off('touchend', touchEnd);
+                    element.off('touchcancel', touchEnd);
+                    element.css({ position: 'unset', left: 'unset', top: 'unset', width: 'unset' });
+                }
+
+                function checkIfCollision(x, y) {
+                    
+                    // console.log(element[0].getBoundingClientRect().left, element[0].getBoundingClientRect().bottom);
+                    // console.log(x,y);
+                }
 
             }
         }
@@ -1174,6 +1291,8 @@
                     },
                     post: function (scope, element, attrs, modalCreateTemplateController) {
 
+                        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
                         let selectedItems = EditModeService.getSelectedItems();
 
                         element.css({ gridArea: 'a' + attrs.itemNumber });
@@ -1188,16 +1307,21 @@
                         })
 
                         element.on('drop', function (event) {
+                            if (isMobile) {
+                                angular.element(document.querySelector('#modalCreateTemplateDragZone')).css({ paddingLeft: '24px', paddingRight: '24px', paddingTop: '10px' });
+                                angular.element(document.querySelector('.grid-elements-col')).css({ opacity: '1' });
+                                // angular.element(document.querySelector('.grid-tools-col')).removeClass('ng-hide');
+                            }
                             // console.log(element[0].getBoundingClientRect());
                             // element.contents().replaceWith(scope.dragElement);
                             element.css({ transform: 'unset', zIndex: 'unset' })
                             element.contents().replaceWith(scope.dragElement.element);
                             let dragLines = $compile(`<svg class="svg-grid svg-to-remove">
-                        <g><line x1="0%" y1="0%" x2="0%" y2="100%" class="svg-lines" drag-line pos="left"></line></g>
-                        <g><line x1="100%" y1="0%" x2="100%" y2="100%" class="svg-lines" drag-line pos="right"></line></g>
-                        <g><line x1="0%" y1="0%" x2="100%" y2="0%" class="svg-lines" drag-line pos="top"></line></g>
-                        <g><line x1="0%" y1="100%" x2="100%" y2="100%" class="svg-lines" drag-line pos="bottom"></line></g>
-                        </svg>`)(scope);
+                                <g><line x1="0%" y1="0%" x2="0%" y2="100%" class="svg-lines" drag-line pos="left"></line></g>
+                                <g><line x1="100%" y1="0%" x2="100%" y2="100%" class="svg-lines" drag-line pos="right"></line></g>
+                                <g><line x1="0%" y1="0%" x2="100%" y2="0%" class="svg-lines" drag-line pos="top"></line></g>
+                                <g><line x1="0%" y1="100%" x2="100%" y2="100%" class="svg-lines" drag-line pos="bottom"></line></g>
+                                </svg>`)(scope);
                             element.append(dragLines);
 
                             let width = element[0].offsetWidth;
@@ -1236,13 +1360,38 @@
                             itemsGridArr[itemIndex].isDummy = false;
                         })
 
-                        element.on('mousedown', mousedown);
-                        element.on('mouseenter', mouseenter);
+                        if (!isMobile){
+                            element.on('mousedown', mousedown);
+                            element.on('mouseenter', mouseenter);
+                        }
+
+                        let elementTouched = {};
+                        if(isMobile){
+                            element.on('touchstart', function (e) {
+                                e.passive(false)
+                                console.log(selectedItems);
+                                // if (EditModeService.getSelectedItems().length === 0) { selectItem();}
+                                // else if (EditModeService.getSelectedItems().length === 1) { selectItem(); }
+                                selectItem();
+                            });
+                            // element.on('touchmove', function (e) {
+                            //     elementTouched = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                            //     MouseDownService.setElementTouched(angular.element(elementTouched).attr('item-number'));
+                            //     console.log(MouseDownService.getElementTouched());
+                            //     console.log(EditModeService.getSelectedItems());
+                            //     // for (let i = 0; i < EditModeService.getSelectedItems().length; i++) {
+                            //     //     if (EditModeService.getSelectedItems()[i] === parseInt(attrs.itemNumber)){
+                            //     //         return;
+                            //     //     }
+                            //     // }
+                            //     selectItem();
+                            // });
+                        }
 
                         function mousedown(event) {
                             if (EditModeService.isResizing() === false) {
+                                console.log('mousedown')
                                 selectedItems = EditModeService.setSelectedItems([]);
-                                // angular.element(document.querySelector('.grid-drop-col')).css({ cursor: 'nw-resize'});
                                 angular.element(document.querySelector('.grid-drop-col')).addClass('resize-cursor');
                                 MouseDownService.down();
                                 $document.on('mouseup', docMouseup);
@@ -1250,11 +1399,13 @@
                             }
                         }
                         function mouseenter(event) {
+                            console.log('mouseenter')
                             if (MouseDownService.status() === true) {
                                 selectItem();
                             }
                         }
                         function docMouseup(event) {
+                            console.log('mouseup')
                             MouseDownService.up();
                             $document.off('mouseup', docMouseup);
                             angular.element(document.querySelector('.grid-drop-col')).removeClass('resize-cursor');
@@ -1272,7 +1423,7 @@
                         }
 
                         function selectItem() {
-                            // console.log(EditModeService.getItemsGridArr())
+                            console.log('selectItem()')
                             selectedItems = EditModeService.getSelectedItems();
                             if (safeSelect(selectedItems) === false) return;
                             // if (!element.hasClass('item-selected')) {
@@ -1310,9 +1461,17 @@
                             // console.log('itemsTotalArea:', itemsTotalArea, 'itemsCurrentArea:', itemsCurrentArea, 'offset',areaOffset)
 
                             let itemSelected = angular.element(document.querySelectorAll('.item-selected'));
-                            for (let j = 0; j < itemSelected.length; j++) {
-                                angular.element(itemSelected[j]).removeClass('item-selected');
-                                angular.element(itemSelected[j]).css({ backgroundColor: '#363636' })
+                            if (isMobile && selectedItems.length === 1){
+                                for (let j = 0; j < itemSelected.length; j++) {
+                                    angular.element(itemSelected[j]).removeClass('item-selected');
+                                    angular.element(itemSelected[j]).css({ backgroundColor: '#363636' })
+                                }
+                            }
+                            else if(!isMobile) {
+                                for (let j = 0; j < itemSelected.length; j++) {
+                                    angular.element(itemSelected[j]).removeClass('item-selected');
+                                    angular.element(itemSelected[j]).css({ backgroundColor: '#363636' })
+                                }
                             }
 
                             if (selectedItems.length === 0) {
@@ -1320,15 +1479,22 @@
                                 element.css({ backgroundColor: 'cadetblue' })
                                 selectedItems.push(parseInt(attrs.itemNumber));
                                 EditModeService.setSelectedItems(selectedItems);
-                                scope.dropGrid.selected = false;
+                                // scope.dropGrid.selected = false;
                                 scope.$apply();
                             }
                             else {
                                 // let row = Math.floor((parseInt(attrs.itemNumber)-1) / gridCols);
+                                // let itemNumberTemp = isMobile ? parseInt(elementTouched) : parseInt(attrs.itemNumber);
                                 let col = (parseInt(attrs.itemNumber) - 1) % gridCols;
-                                let firstSelectedItemRec = dropZoneGridItem[selectedItems[0] - 1].getBoundingClientRect();
+                                let firstSelectedItemRec = {};
+                                try {
+                                    firstSelectedItemRec = dropZoneGridItem[selectedItems[0] - 1].getBoundingClientRect(); //FIXME bug error on mobile
+                                } catch (error) {
+                                    console.log(error)
+                                    cleanGrid();
+                                    return;
+                                }
                                 let firstSelectedItemArea = firstSelectedItemRec.width * firstSelectedItemRec.height;
-                                console.log(firstSelectedItemArea)
 
                                 for (let i = selectedItems[0] - 1; i < parseInt(attrs.itemNumber); i++) {
                                     if ((i % gridCols) <= col && (i % gridCols) >= ((selectedItems[0] - 1) % gridCols)) {
@@ -1386,26 +1552,18 @@
             replace: false,
             scope: true,
             require: ['^?item', '^?myImage'],
-            // controller: function(){
-            //     // let myImageToolboxController = this;
-
-            //     // myImageToolboxController.$onInit = function(){
-            //     //     myImageToolboxController.cagadademierda = null;
-            //     // }
-            // },
             templateUrl: 'myImage/myImageToolbox.html',
             compile: function () {
                 return {
                     pre: function (scope, element, attrs, controllers) {
 
                         scope.$on('dropDownClick', function (event, data) {
-                            // console.log('hello brodcast in myImageToolbox', data);
                             scope.showForm1 = false;
                         })
 
                     },
                     post: function (scope, element, attrs, controllers) {
-                        // console.log('post myImageToolbox')
+
                         const itemController = controllers[0];
                         const myImageController = controllers[1];
                         const myImageToolboxController = controllers[2];
@@ -1417,47 +1575,16 @@
                             if (parseInt(itemController.itemNumber) === 1) {
                                 const toolboxClone = angular.element(document.querySelector('#toolboxClone'));
                                 const copy = angular.copy(element)
-                                // CurrentStateService.setCurrentCustomImageId(myImageController.callerId);
-                                // console.log(angular.element(element[0].querySelector('.toolbox-form-wrapper')).attr('target-id'))
 
                                 let compiledCopy = $compile(copy)(scope);
-                                // console.log(compiledCopy[0])
 
                                 angular.element(function () {
                                     let toolboxFormWrapper = angular.element(compiledCopy[0].querySelector('.toolbox-form-wrapper'));
-                                    // console.log(toolboxFormWrapper[0])
                                     toolboxFormWrapper.attr('target-id', myImageController.callerId);
                                     toolboxClone.append(compiledCopy);
                                 })
                             }
-
-                            // scope.itemNumber = myImageController.callerId;
-
-                            // scope.elementObjectFitSelect = function (val) {
-                            //     let targetId = '#img' + itemController.itemNumber + 'grid' + myImageController.callerId;
-                            //     angular.element(document.querySelector(targetId)).css({ objectFit: val });
-                            // }
                         }
-                        // else {
-                        //     scope.elementObjectFitSelect = function (val) {
-                        //         console.log(val)
-                        //         // let targetId = [];
-
-                        //         let itemsCount = angular.element(document.querySelectorAll('.item'));
-                        //         let item1 = angular.element(document.querySelectorAll('#item1'));
-                        //         angular.element(function () {
-                        //             let customTargetId = element.children().attr('target-id');
-                        //             console.log(customTargetId);
-                        //             for (let i = 1; i <= itemsCount.length; i++) {
-                        //                 let temp = angular.element(document.querySelectorAll('#img' + i + 'grid' + customTargetId))
-                        //                 if (temp.length > 0) {
-                        //                     // targetId.push(temp[0]);
-                        //                     temp.css({ objectFit: val });
-                        //                 }
-                        //             }
-                        //         })
-                        //     }
-                        // }
 
                         if (itemController) {
                             scope.changeBlend = function (val) {
@@ -1554,7 +1681,6 @@
                                 angular.element(element[0].firstElementChild).css({ ...imageStyle });
                             }
                             angular.element(element[0].firstElementChild).attr('src', imageSrc);
-                            // element.parent().css({ ...gridItemStyle });
                             element.css({ ...gridItemStyle });
                         }
 
@@ -1583,13 +1709,6 @@
                                 { id: '16', name: 'luminosity' },
                             ]
                         };
-
-                        // scope.changeBlend = function(val) {
-                        //     console.log(element.parent()[0])
-                        //     let img = angular.element(element[0].querySelector('img'));
-                        //     img.css({ mixBlendMode: val})
-                        // }
-
                     }
                 }
             }
@@ -1608,7 +1727,6 @@
                     pre: function (scope, element, attrs, controllers) {
 
                         scope.$on('dropDownClick', function (event, data) {
-                            // console.log('hello brodcast in myTextToolbox', data);
                             scope.showForm1 = false;
                         })
 
@@ -1620,7 +1738,6 @@
 
                         if (itemController && EditModeService.status() === false) {
 
-                            // console.log(EditModeService.status())
                             const itemToolboxCard = angular.element(document.querySelector('#itemToolboxCard' + itemController.itemNumber));
                             itemToolboxCard.append(element);
 
@@ -1637,9 +1754,6 @@
                                     toolboxClone.append(compiledCopy);
                                 })
                             }
-                        }
-                        else {
-                            // element.remove();
                         }
 
                         scope.$on('$destroy', function () {
@@ -1850,10 +1964,9 @@
                             ielement.on('mouseover', function () {
                                 targetId = ielement.parent().parent().attr('target-id');
                                 if (targetId) {
-                                    // console.log(targetId)
+                                    console.log(targetId)
                                     targetItem = angular.element(document.querySelector(targetId));
                                     targetItem.addClass('cute-jump');
-                                    // console.log(targetItem[0])
                                 }
                             })
 
@@ -1876,7 +1989,6 @@
         return {
             restrict: 'E',
             scope: true,
-            // require: '^^?item',
             require: ['^^?item', '^^?myImage', '^^?myText'],
             replace: true,
             template: `<div>
@@ -1958,7 +2070,6 @@
                         let itemArrPosJ = null;
 
                         if (itemController) {
-
                             let itemNumber = itemController.itemNumber;
 
                             scope.itemData = {};
@@ -1966,7 +2077,9 @@
                             itemArrPosI = scope.itemArrPosI = itemController.itemArrPosI = itemData.arrPosition.i;
                             itemArrPosJ = scope.itemArrPosJ = itemController.itemArrPosJ = itemData.arrPosition.j;
                             let item = ItemDataFactory.getItem(itemNumber).data;
-                            targetId = angular.element(document.querySelector('#' + attrs.targetId + itemNumber));
+                            // targetId = angular.element(document.querySelector('#' + attrs.targetId + itemNumber));
+                            targetId = angular.element(document.querySelector(element.parent().parent().parent().parent().attr('target-id')));
+                            // targetId = angular.element(document.querySelector(element.parent().parent().parent().parent().attr('target-id'))); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 
                             let targetCustomId = angular.element(document.querySelector('#item' + itemNumber));
                             let dropZoneGridItems = angular.element(targetCustomId[0].querySelectorAll('.custom-drop-zone-grid-item'));
@@ -1978,21 +2091,21 @@
                                         customItemNumber = callerId;
                                     }
                                 }
-                                targetId = angular.element(document.querySelector('#' + attrs.targetId + itemNumber + 'grid' + customItemNumber));
-                                if (!element.parent().parent().parent().attr('target-id')) {
-                                    element.parent().parent().parent().attr('target-id', '#' + attrs.targetId + itemNumber + 'grid' + customItemNumber);
-                                }
-                                // console.log('targetId  ', targetId)
+                                // targetId = angular.element(document.querySelector('#' + attrs.targetId + itemNumber + 'grid' + customItemNumber));
+                                targetId = angular.element(document.querySelector(element.parent().parent().parent().parent().attr('target-id'))); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+                                // if (!element.parent().parent().parent().attr('target-id')) {
+                                //     element.parent().parent().parent().attr('target-id', '#' + attrs.targetId + itemNumber + 'grid' + customItemNumber);
+                                // }
                             }
+                            
                         }
                         else {
-                            // console.log('getCustomTargets')
                             getCustomTargets();
                         }
 
                         function getCustomTargets() {
                             let itemsCount = angular.element(document.querySelectorAll('.item'));
-                            let pagesCountCheck = angular.element(document.querySelectorAll('.page')).length;
+                            // let pagesCountCheck = angular.element(document.querySelectorAll('.page')).length;
 
                             // Check if targetID's are in the DOM, changing pages removes some nodes
                             if (targetId.length === itemsCount.length) {
@@ -2005,35 +2118,30 @@
                                     }
                                 }
                             }
-                            // if (pagesCountCheck === pagesCount && itemsCount.length === targetId.length) {
-                            //     return;
-                            // }
-                            // pagesCount = pagesCountCheck;
-                            // console.log('reset targetId')
-                            targetId = [];
-                            let item1 = angular.element(document.querySelectorAll('#item1'));
-                            // let customImagesCount = angular.element(item1[0].querySelectorAll('img'));
-                            // let customTextCount = angular.element(item1[0].querySelectorAll('.my-text'));
 
-                            // angular.element(function () {
+                            targetId = [];
+                            // let item1 = angular.element(document.querySelectorAll('#item1'));
+                            let superParent = {};
                             customTargetId = null;
                             if (attrs.type !== 'file') {
-                                customTargetId = element.parent().parent().parent().attr('target-id');
+                                // customTargetId = element.parent().parent().parent().attr('target-id');
+                                superParent = element.parent().parent().parent().parent().attr('target-id'); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+                                // console.log(element.parent().parent().parent().parent().attr('target-id'))
                             }
                             else {
-                                customTargetId = element.parent().parent().parent().parent().parent().attr('target-id');
+                                // customTargetId = element.parent().parent().parent().parent().parent().attr('target-id');
+                                superParent = element.parent().parent().parent().parent().parent().parent().attr('target-id'); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+                                // console.log(element.parent().parent().parent().parent().attr('target-id'))
                             }
 
                             for (let i = 1; i <= itemsCount.length; i++) {
-                                let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + i + 'grid' + customTargetId));
+                                // let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + i + 'grid' + customTargetId));
+                                // let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + i + 'grid' +  superParent.replace( /(^.+\D)(\d+)(\D+)(\d+$)/g,'$4')   )); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+                                let temp = angular.element(document.querySelectorAll('#' + attrs.targetId + i + 'grid' + superParent.match(/(\d+$)/g)[0]   )); //newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
                                 if (temp.length > 0) {
                                     targetId.push(temp[0]);
                                 }
                             }
-                            // console.log('itemsCount.length', itemsCount.length)
-                            // console.log('targetId.length  ', targetId)
-                            // console.log('targetId  ', targetId)
-                            // })
                         }
 
                         if (attrs.property === 'filter') {
@@ -2216,7 +2324,6 @@
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function borderColor(val) {
-                            console.log(targetId)
                             for (let i = 0; i < targetId.length; i++) {
                                 // angular.element(targetId[i]).parent().parent()[0].style.borderColor = val;
                                 angular.element(targetId[i]).parent()[0].style.borderColor = val;
@@ -2231,7 +2338,6 @@
                             // ItemDataFactory.saveItemCss(val, itemArrPosI, itemArrPosJ, attrs.propertyValue);
                         }
                         function borderWidth(val) {
-                            console.log(targetId)
                             for (let i = 0; i < targetId.length; i++) {
                                 // angular.element(targetId[i]).parent().parent()[0].style.borderWidth = val + 'px';
                                 angular.element(targetId[i]).parent()[0].style.borderWidth = val + 'px';
@@ -2510,19 +2616,8 @@
                 let overlay = $compile('<div class="overlay dont-print-me"><div class="text">Item ' + itemNumber + '</div></div>')(scope);
                 element.append(overlay);
 
-                // console.log(angular.element(document.querySelector('#itemToolboxCAGADA')))
-                // if ( angular.element(document.querySelector('#itemToolbox')).length === 0 ) {
-                // $templateRequest("itemToolboxWrapper.html").then(function (html) {
-                //     let template = angular.element(html);
-                //     // template[0].id = 'itemToolbox';
-                //     // template[0].id = 'itemToolbox' + itemController.itemNumber;
-                //     let itemToolBoxIncludeWrapper = angular.element(document.querySelector('#itemToolBoxIncludeWrapper'));
-                //     itemToolBoxIncludeWrapper.append(template);
-                //     $compile(template)(scope);
-                // });
-                // }
-
-                // const imageWrapperElement = angular.element(element[0].children[0].querySelector('.imageWrapper'));
+                const itemToolboxCard = angular.element(document.querySelector('#itemToolboxCard' + itemNumber));
+                
                 const imageWrapperElement = element;
 
                 imageWrapperElement.on('mouseover', function (event) {
@@ -2538,22 +2633,30 @@
 
                     if (!element.hasClass('selected')) {
 
-                        // // angular.element(document.querySelectorAll('#itemToolBoxIncludeWrapper')).remove();
-                        // // angular.element(document.querySelector('#itemToolBoxIncludeWrapper')).detach();
-
-                        // let itemToolBox = $compile("<div id='itemToolBoxIncludeWrapper'><ng-include src=\"'itemToolBox.html'\" onload=\"onload()\"></ng-include></div>")(scope);
-                        // // let itemToolBox = $compile($templateCache.get('itemTB.html'))(scope);
-                        // elementToolsElement.append(itemToolBox);
-
-                        // scope.itemId = itemNumber;
+                        let myImageToolbox = angular.element(itemToolboxCard[0].querySelector('my-image-toolbox'));
+                        let myTextToolbox = angular.element(itemToolboxCard[0].querySelector('my-text-toolbox'));
+                        
+                        if (myImageToolbox.length === 0 && myTextToolbox.length === 0) {
+                            // Compile toolbox on click-------------------------------------------------------------------------------------------------------
+                            let myImageArr = element[0].querySelectorAll('.my-image');
+                            for (let i = 0; i < myImageArr.length; i++) {
+                                let id = angular.element(myImageArr[i]).attr('id');
+                                // angular.element(myImageArr).parent().append($compile(`<my-image-toolbox class="scroll-container-item" target-id="#img${itemNumber}grid${i + 1}"></my-image-toolbox>`)(scope));
+                                angular.element(myImageArr).parent().append($compile(`<my-image-toolbox class="scroll-container-item" target-id="#${id}"></my-image-toolbox>`)(scope));
+                            }
+                            let myTextArr = element[0].querySelectorAll('.my-text');
+                            for (let i = 0; i < myTextArr.length; i++) {
+                                let id = angular.element(myTextArr[i]).attr('id');
+                                // angular.element(myTextArr).parent().append($compile(`<my-text-toolbox class="scroll-container-item" target-id="#text${itemNumber}grid${i + 1}"></my-text-toolbox>`)(scope));
+                                angular.element(myTextArr).parent().append($compile(`<my-text-toolbox class="scroll-container-item" target-id="#${id}"></my-text-toolbox>`)(scope));
+                            }
+                        //--------------------------------------------------------------------------------------------------------------------------------
+                        }
 
                         angular.element(document.querySelector('#itemToolBoxIncludeWrapper')).removeClass('hideBlock');
 
                         angular.element(document.querySelector('.item-tool-box-is-visible')).addClass('hideBlock');
                         angular.element(document.querySelector('.item-tool-box-is-visible')).removeClass('item-tool-box-is-visible');
-
-                        // angular.element(document.querySelector('#'+template+'ToolBox' + itemNumber)).removeClass('hideBlock');
-                        // angular.element(document.querySelector('#'+template+'ToolBox' + itemNumber)).addClass('item-tool-box-is-visible');
 
                         angular.element(document.querySelector('#itemToolbox' + itemNumber)).removeClass('hideBlock');
                         angular.element(document.querySelector('#itemToolbox' + itemNumber)).addClass('item-tool-box-is-visible');
@@ -2565,7 +2668,7 @@
 
                 });
 
-                var pageElement = angular.element(document.querySelectorAll('.navbar'));
+                let pageElement = angular.element(document.querySelectorAll('.navbar'));
                 pageElement.on('click', function (event) {
                     angular.element(document.querySelectorAll('.selected')).removeClass('selected');
                     angular.element(document.querySelector('#tools')).removeClass('hideBlock');
@@ -3577,6 +3680,7 @@
 
     app.factory('MouseDownService', [function () {
         let mousedown = false;
+        let elementToched = {};
         return {
             up: function () {
                 mousedown = false;
@@ -3586,6 +3690,12 @@
             },
             status: function () {
                 return mousedown;
+            },
+            getElementTouched: function() {
+                return elementToched;
+            },
+            setElementTouched: function (element) {
+                elementToched = element;
             }
         }
     }]);

@@ -54,6 +54,14 @@
                 <div class="content">
                     <h1 style="color: #d9d9d9; text-align: center;font-weight: 900">Custom template</h1>
                     <p style="color: #d9d9d9; text-align: center;font-weight: 400">Drag and drop an element into the grid</p>
+                    <div>
+                        <button class="button is-dark" style="margin: auto; display: block; color: #d9d9d9;" ng-init="showTools=false" ng-click="showTools=!showTools">
+                            <span class="icon is-small">
+                                <i class="fas fa-cogs"></i>
+                            </span>
+                            <span>Grid tools</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -62,13 +70,13 @@
 
             <div class="container" style="max-width: 110vh;">
                 
-                <div class="grid-item grid-tools-col">
+                <div class="grid-item grid-tools-col" ng-show="showTools">
 
                     <div class="column-header">
                         <p>Grid tools</p>
                     </div>
                     
-                    <div style="padding: 10%;">
+                    <div class="column-content" style="padding: 10%;">
                         <div class="field" style="max-width: 100%;">
                             <label class="label" style="margin-bottom: 0px; color: #fff; font-weight: 400;">Columns</label>
                             <div class="control">

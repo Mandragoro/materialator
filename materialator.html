@@ -4,8 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <title>Materialator</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> -->
+    <script src="node_modules/angular/angular.js"></script>
     <script src="materialator.js"></script>
+    <!-- <script src="DragDropTouch.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <link href="materialator.css" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
@@ -60,7 +62,7 @@
 
               <div class="field is-grouped is-grouped-multiline">
                 <p class="control">
-                  <button class="button is-light is-outlined is-inverted" ng-click="createTemplate()">
+                  <button class="button is-light is-outlined is-inverted" ng-click="createTemplate();burger=!burger;">
                     <span class="icon is-small">
                       <i class="fas fa-edit"></i>
                     </span>
